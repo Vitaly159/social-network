@@ -12,6 +12,7 @@
       "isolatedModules": true,
       "noEmit": true,
       "noFallthroughCasesInSwitch": true,
+      "noImplicitAny": true,
       "jsx": "react-jsx"
     },
     "include": [
