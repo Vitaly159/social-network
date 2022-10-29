@@ -3,9 +3,9 @@ import SignIn from "./compoments/SignIn/SignIn";
 
 function App() {
   return (
-    <Box>
+    <div>
       <SignIn />
-    </Box>
+    </div>
   );
 }
 
