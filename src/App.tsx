@@ -1,9 +1,6 @@
-import SignIn from "./compoments/SignIn";
-
+import SignIn from "./compoments/SignIn/SignIn";
 
 function App() {
-  
-  
   return (
     <>
       <SignIn />

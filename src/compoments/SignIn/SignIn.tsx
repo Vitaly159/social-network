@@ -8,11 +8,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import PeopleIcon from "@material-ui/icons/People";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import { Typography } from "@material-ui/core";
-//окно входа
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CloseIcon from "@material-ui/icons/Close";
-import TextField from "@material-ui/core/TextField";
+
+import DialogSignIn from "./DialogSignIn"; //окно входа
+import DialogSignUp from "./DialogSignUp"; //окно регистрации
 
 const useStyles = makeStyles({
   wrapper: {
@@ -86,73 +84,23 @@ const useStyles = makeStyles({
     marginTop: 40,
     fontWeight: 600,
   },
-  //окно входа
-  signInWrapper: {
-    "& .MuiDialog-paperWidthSm": {
-      width: 400,
-      borderRadius: "10px",
-      padding: "0 20px 15px",
-    },
-    "& .MuiSvgIcon-root": {
-      color: "#1e90ff",
-      fontSize: 20,
-      "&:hover": {
-        color: "blue",
-        cursor: "pointer",
-      },
-    },
-    "& .MuiDialogTitle-root": {
-      padding: "13px 24px 10px 0",
-    },
-  },
-  dialogHeader: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
-  },
-  dialogHeaderText: {
-    fontWeight: 700,
-    marginLeft: 25,
-    position: "relative",
-  },
-  dialogTitle: {
-    borderBottom: "1px c solid",
-  },
-  input: {
-    marginTop: "10px",
-    "& .MuiInputLabel-filled": {
-      transform: "translate(5px, 5px) scale(0.7)",
-    },
-    "& .MuiFilledInput-root": {
-      backgroundColor: "rgb(245,245,245)",
-    },
-  },
-  buttonDialog: {
-    marginTop: 20,
-    backgroundColor: "DeepSkyBlue",
-    width: "100%",
-    borderRadius: "200px",
-    color: "white",
-    textTransform: "none",
-    fontSize: 14,
-    margin: "10px 0",
-    "&:hover": {
-      backgroundColor: "rgba(0, 191, 255, 0.54)",
-    },
-  },
 });
 
 function SignIn() {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  //окно входа
+  const [openSignIn, setOpenSignIn] = useState<boolean>(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const clickOpenSignIn = (): void => {
+    setOpenSignIn(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  //окно регистрации
+  const [openSignUp, setOpenSignUp] = useState<boolean>(false);
+
+  const clickOpenSignUp = (): void => {
+    setOpenSignUp(true);
   };
 
   return (
@@ -190,32 +138,15 @@ function SignIn() {
           <Typography variant="body2" className={classes.subTitleText}>
             Присоединяйтесь к Твиттеру прямо сейчас!
           </Typography>
-          <Button className={classes.signUp}>Зарегистрироваться</Button>
-          <Button className={classes.signIn} onClick={handleClickOpen}>
+          <Button className={classes.signUp} onClick={clickOpenSignUp}>Зарегистрироваться</Button>
+          <Button className={classes.signIn} onClick={clickOpenSignIn}>
             Войти
           </Button>
         </Box>
       </Box>
 
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        className={classes.signInWrapper}
-      >
-        <DialogTitle id="alert-dialog-title" className={classes.dialogTitle}>
-          <Box className={classes.dialogHeader}>
-            <CloseIcon onClick={handleClose} />
-            <Typography variant="body1" className={classes.dialogHeaderText}>
-              Войти в Твиттер
-            </Typography>
-          </Box>
-        </DialogTitle>
-        <TextField className={classes.input} label="Email" variant="filled" />
-        <TextField className={classes.input} label="Пароль" variant="filled" />
-        <Button className={classes.buttonDialog}>Войти</Button>
-      </Dialog>
+      <DialogSignIn openSignIn={openSignIn} setOpenSignIn={setOpenSignIn} />
+      <DialogSignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp}/>
     </Box>
   );
 }
