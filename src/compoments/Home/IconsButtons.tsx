@@ -68,7 +68,7 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
   };
 
   const isActiveIconStyle = (value: string): string => {
-    const style = active == value ? classes.activeIcon : classes.notActiveIcon;
+    const style = active === value ? classes.activeIcon : classes.notActiveIcon;
     return style;
   };
 
