@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -9,8 +9,8 @@ import PeopleIcon from "@material-ui/icons/People";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import { Typography } from "@material-ui/core";
 
-import DialogSignIn from "./DialogSignIn"; //окно входа
-import DialogSignUp from "./DialogSignUp"; //окно регистрации
+import { DialogSignIn } from "./DialogSignIn"; //окно входа
+import { DialogSignUp } from "./DialogSignUp"; //окно регистрации
 
 const useStyles = makeStyles({
   wrapper: {
@@ -19,6 +19,7 @@ const useStyles = makeStyles({
   },
   leftBlock: {
     width: "50%",
+    minWidth: 320,
     backgroundColor: "DeepSkyBlue",
   },
   textBlock: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles({
   },
   rightBlock: {
     width: "50%",
+    minWidth: 320,
   },
   actionBlock: {
     width: 320,
@@ -86,7 +88,7 @@ const useStyles = makeStyles({
   },
 });
 
-function SignIn() {
+export const SignIn: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
   //окно входа
@@ -117,7 +119,7 @@ function SignIn() {
           <Box className={classes.list}>
             <PeopleIcon />
             <Typography className={classes.listText}>
-              Узнайте, о чем говорят в ммре.
+              Узнайте, о чем говорят в мире.
             </Typography>
           </Box>
 
@@ -138,7 +140,9 @@ function SignIn() {
           <Typography variant="body2" className={classes.subTitleText}>
             Присоединяйтесь к Твиттеру прямо сейчас!
           </Typography>
-          <Button className={classes.signUp} onClick={clickOpenSignUp}>Зарегистрироваться</Button>
+          <Button className={classes.signUp} onClick={clickOpenSignUp}>
+            Зарегистрироваться
+          </Button>
           <Button className={classes.signIn} onClick={clickOpenSignIn}>
             Войти
           </Button>
@@ -146,9 +150,7 @@ function SignIn() {
       </Box>
 
       <DialogSignIn openSignIn={openSignIn} setOpenSignIn={setOpenSignIn} />
-      <DialogSignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp}/>
+      <DialogSignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} />
     </Box>
   );
-}
-
-export default SignIn;
+};

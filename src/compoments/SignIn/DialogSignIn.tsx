@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -63,7 +65,12 @@ const useStyles = makeStyles({
   },
 });
 
-function DialogSignIn({ openSignIn, setOpenSignIn }:{openSignIn: boolean; setOpenSignIn: Dispatch<SetStateAction<boolean>>} ) {
+interface Props {
+  openSignIn: boolean;
+  setOpenSignIn: Dispatch<SetStateAction<boolean>>;
+}
+
+export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
   const classes = useStyles();
 
   const handleClose = (): void => {
@@ -74,8 +81,6 @@ function DialogSignIn({ openSignIn, setOpenSignIn }:{openSignIn: boolean; setOpe
     <Dialog
       open={openSignIn}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
       className={classes.signInWrapper}
     >
       <DialogTitle id="alert-dialog-title" className={classes.dialogTitle}>
@@ -88,9 +93,9 @@ function DialogSignIn({ openSignIn, setOpenSignIn }:{openSignIn: boolean; setOpe
       </DialogTitle>
       <TextField className={classes.input} label="Email" variant="filled" />
       <TextField className={classes.input} label="Пароль" variant="filled" />
-      <Button className={classes.buttonDialog}>Войти</Button>
+      <Button component={Link} to={"/home"} className={classes.buttonDialog}>
+        Войти
+      </Button>
     </Dialog>
   );
-}
-
-export default DialogSignIn;
+};

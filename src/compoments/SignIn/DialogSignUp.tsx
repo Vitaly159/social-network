@@ -63,7 +63,12 @@ const useStyles = makeStyles({
   },
 });
 
-function DialogSignUp({ openSignUp, setOpenSignUp }:{openSignUp: boolean; setOpenSignUp: Dispatch<SetStateAction<boolean>>} ) {
+interface Props {
+  openSignUp: boolean;
+  setOpenSignUp: Dispatch<SetStateAction<boolean>>;
+}
+
+export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
   const classes = useStyles();
 
   const handleClose = (): void => {
@@ -74,8 +79,6 @@ function DialogSignUp({ openSignUp, setOpenSignUp }:{openSignUp: boolean; setOpe
     <Dialog
       open={openSignUp}
       onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
       className={classes.signInWrapper}
     >
       <DialogTitle id="alert-dialog-title" className={classes.dialogTitle}>
@@ -92,6 +95,4 @@ function DialogSignUp({ openSignUp, setOpenSignUp }:{openSignUp: boolean; setOpe
       <Button className={classes.buttonDialog}>Далее</Button>
     </Dialog>
   );
-}
-
-export default DialogSignUp;
+};
