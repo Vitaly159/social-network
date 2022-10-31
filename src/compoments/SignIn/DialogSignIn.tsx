@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -73,9 +74,22 @@ interface Props {
 export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
   const classes = useStyles();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const changeEmail = (e: any): void => {
+    setEmail(e.target.value);
+  };
+
+  const changePassword = (e: any): void => {
+    setPassword(e.target.value);
+  };
+
   const handleClose = (): void => {
     setOpenSignIn(false);
   };
+
+  const clickEnter = email === "hi" && password === "123" ? "/home" : "/";
 
   return (
     <Dialog
@@ -91,9 +105,21 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
           </Typography>
         </Box>
       </DialogTitle>
-      <TextField className={classes.input} label="Email" variant="filled" />
-      <TextField className={classes.input} label="Пароль" variant="filled" />
-      <Button component={Link} to={"/home"} className={classes.buttonDialog}>
+      <TextField
+        className={classes.input}
+        label="Email"
+        variant="filled"
+        value={email}
+        onChange={changeEmail}
+      />
+      <TextField
+        className={classes.input}
+        label="Пароль"
+        variant="filled"
+        value={password}
+        onChange={changePassword}
+      />
+      <Button component={Link} to={clickEnter} className={classes.buttonDialog}>
         Войти
       </Button>
     </Dialog>
