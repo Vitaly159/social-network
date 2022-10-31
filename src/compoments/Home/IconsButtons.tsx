@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, List, IconButton, Typography } from "@material-ui/core";
+import { Box, List, IconButton, Typography, Button } from "@material-ui/core";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import SearchIcon from "@material-ui/icons/Search";
-import HomeIcon from "@material-ui/icons/Home";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ListAltIcon from "@material-ui/icons/ListAlt";
@@ -14,7 +13,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles({
   iconsWrapper: {
-    width: "100vh",
+    // width: "100%",
     padding: 12,
   },
   logoBlock: {
@@ -24,21 +23,28 @@ const useStyles = makeStyles({
   iconBlock: {
     display: "flex",
   },
-  notActiveIcon: {
+  twitterIcon: {
+    color: "DeepSkyBlue",
     alignSelf: "center",
     fontSize: 30,
+  },
+  notActiveIcon: {
+    alignSelf: "center",
+    fontSize: 27,
+    color: 'black'
   },
   activeIcon: {
     color: "DeepSkyBlue",
     alignSelf: "center",
-    fontSize: 30,
+    fontSize: 27,
   },
   textIcon: {
     cursor: "pointer",
     fontWeight: 600,
     alignSelf: "center",
     marginLeft: 20,
-    fontSize: 16,
+    fontSize: 15,
+    color: 'black'
   },
   button: {
     borderRadius: 30,
@@ -47,6 +53,21 @@ const useStyles = makeStyles({
       backgroundColor: "rgba(0,190,256, 0.1)",
     },
   },
+  buttonTwite: {
+    width: "90%",
+    backgroundColor: "DeepSkyBlue",
+    borderRadius: "200px",
+    color: "white",
+    textTransform: "none",
+    fontSize: 14,
+    fontWeight: 600,
+    "&:hover": {
+      backgroundColor: "rgba(0, 191, 255, 0.54)",
+    },
+  },
+  buttonBlock: {
+    textAlign: 'center'
+  }
 });
 
 interface Menu {
@@ -75,7 +96,7 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
   const icons: Menu[] = [
     {
       name: "Главная",
-      img: <HomeIcon className={isActiveIconStyle("Главная")} />,
+      img: <HomeOutlinedIcon className={isActiveIconStyle("Главная")} />,
     },
     {
       name: "Поиск",
@@ -83,7 +104,7 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
     },
     {
       name: "Уведомления",
-      img: <NotificationsIcon className={isActiveIconStyle("Уведомления")} />,
+      img: <NotificationsNoneIcon className={isActiveIconStyle("Уведомления")} />,
     },
     {
       name: "Сообщения",
@@ -108,29 +129,36 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
   ];
 
   return (
-    <List component="nav" className={classes.iconsWrapper}>
-      <Box className={classes.logoBlock}>
-        <IconButton onClick={refreshPage}>
-          <TwitterIcon className={classes.activeIcon} />
-        </IconButton>
-      </Box>
-
-      {icons.map((icon, index) => (
-        <Box
-          className={classes.iconBlock}
-          key={index}
-          onClick={() => getActive(icon.name)}
-        >
-          <IconButton className={classes.button}>
-            {icon.img}
-            <Typography
-              className={`${classes.textIcon} ${isActiveIconStyle(icon.name)}`}
-            >
-              {icon.name}
-            </Typography>
+    <Box>
+      <List component="nav" className={classes.iconsWrapper}>
+        <Box className={classes.logoBlock}>
+          <IconButton onClick={refreshPage}>
+            <TwitterIcon className={classes.twitterIcon} />
           </IconButton>
         </Box>
-      ))}
-    </List>
+
+        {icons.map((icon, index) => (
+          <Box
+            className={classes.iconBlock}
+            key={index}
+            onClick={() => getActive(icon.name)}
+          >
+            <IconButton className={classes.button}>
+              {icon.img}
+              <Typography
+                className={`${classes.textIcon} ${isActiveIconStyle(
+                  icon.name
+                )}`}
+              >
+                {icon.name}
+              </Typography>
+            </IconButton>
+          </Box>
+        ))}
+      </List>
+      <Box className={classes.buttonBlock}>
+        <Button className={classes.buttonTwite}>Твитнуть</Button>
+      </Box>
+    </Box>
   );
 };
