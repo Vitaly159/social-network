@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 //material ui
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { Box, InputAdornment } from "@material-ui/core";
+import { InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles((theme: Theme) =>
