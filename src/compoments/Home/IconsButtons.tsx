@@ -13,8 +13,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles({
   iconsWrapper: {
-    // width: "100%",
-    padding: 12,
+    paddingTop: 13
   },
   logoBlock: {
     display: "flex",
@@ -22,11 +21,17 @@ const useStyles = makeStyles({
   },
   iconBlock: {
     display: "flex",
+    top: -12,
+    position: "relative"
   },
   twitterIcon: {
     color: "DeepSkyBlue",
     alignSelf: "center",
     fontSize: 30,
+  },
+  twitterIconBtn: {
+    padding: "12px",
+    top: -12,
   },
   notActiveIcon: {
     alignSelf: "center",
@@ -44,7 +49,6 @@ const useStyles = makeStyles({
     alignSelf: "center",
     marginLeft: 20,
     fontSize: 15,
-    color: 'black'
   },
   button: {
     borderRadius: 30,
@@ -61,6 +65,7 @@ const useStyles = makeStyles({
     textTransform: "none",
     fontSize: 14,
     fontWeight: 600,
+    top: -12,
     "&:hover": {
       backgroundColor: "rgba(0, 191, 255, 0.54)",
     },
@@ -132,7 +137,7 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
     <Box>
       <List component="nav" className={classes.iconsWrapper}>
         <Box className={classes.logoBlock}>
-          <IconButton onClick={refreshPage}>
+          <IconButton onClick={refreshPage} className={classes.twitterIconBtn}>
             <TwitterIcon className={classes.twitterIcon} />
           </IconButton>
         </Box>
