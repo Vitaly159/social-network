@@ -3,8 +3,8 @@ import React, { useState, useRef } from "react";
 import {
   makeStyles,
   withStyles,
-  Theme,
-  createStyles,
+//   Theme,
+//   createStyles,
 } from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
@@ -61,16 +61,16 @@ const useStyles = makeStyles({
   },
 });
 
-const useStylesBar = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      "& > * + *": {
-        marginLeft: theme.spacing(2),
-      },
-    },
-  })
-);
+// const useStylesBar = makeStyles((theme: Theme) =>
+//   createStyles({
+//     root: {
+//       display: "flex",
+//       "& > * + *": {
+//         marginLeft: theme.spacing(2),
+//       },
+//     },
+//   })
+// );
 
 const CssTextField = withStyles({
   root: {
@@ -91,7 +91,7 @@ const CssTextField = withStyles({
 
 export const BlogsHeader: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-  const classesBar = useStylesBar();
+//   const classesBar = useStylesBar();
   const inputTextRef = useRef("");
 
   const [textBar, setTextBar] = useState<number>(280);
