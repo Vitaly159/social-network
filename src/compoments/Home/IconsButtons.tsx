@@ -87,7 +87,7 @@ const refreshPage = (): void => {
 export const ButtonsIcons: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
-  const [active, setActive] = useState("Главная");
+  const [active, setActive] = useState<string>("Главная");
 
   const getActive = (value: string): void => {
     setActive(value);
