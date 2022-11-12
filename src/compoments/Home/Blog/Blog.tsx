@@ -7,10 +7,8 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
 //store
-import { useAppSelector, 
-  // useAppDispatch 
-} from "../../../hooks/hooks";
-// import { getTweets } from "../../../reducers/Tweets";
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { getTweets } from "../../../reducers/Tweets";
 
 import { BlogsHeader } from "./BlogsHeader";
 
@@ -58,7 +56,7 @@ const useStyles = makeStyles({
 
 export const Blog: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
   useEffect(() => {
@@ -70,9 +68,7 @@ export const Blog: React.FC = (): React.ReactElement => {
           return res.json();
         })
         .then((json) => {
-          // dispatch(getTweets(json));
-          console.log(json);
-          
+          dispatch(getTweets(json));
         });
     };
     fetchGetTweets();
