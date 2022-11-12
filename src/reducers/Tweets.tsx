@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import uuid from "react-uuid";
+// import uuid from "react-uuid";
 
 type User = {
   firstName: string;
@@ -25,7 +25,7 @@ export const Tweets = createSlice({
   name: "tweets",
   initialState,
   reducers: {
-    getTweets(state, action) {
+    getTweets(state, action: PayloadAction<any[]>) {
       state.tweets = action.payload;
     },
   },
