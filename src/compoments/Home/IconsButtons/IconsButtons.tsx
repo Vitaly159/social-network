@@ -10,6 +10,7 @@ import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import { AddTweet } from "./AddTweet";
 
 const useStyles = makeStyles({
   iconsWrapper: {
@@ -87,6 +88,12 @@ const refreshPage = (): void => {
 export const ButtonsIcons: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
+  const [openAddTweet, setOpenAddTweet] = useState<boolean>(false);
+
+  const clickOpenAddTweet = (): void => {
+    setOpenAddTweet(true);
+  };
+
   const [active, setActive] = useState<string>("Главная");
 
   const getActive = (value: string): void => {
@@ -162,8 +169,10 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
         ))}
       </List>
       <Box className={classes.buttonBlock}>
-        <Button className={classes.buttonTwite}>Твитнуть</Button>
+        <Button className={classes.buttonTwite} onClick={clickOpenAddTweet}>Твитнуть</Button>
       </Box>
+
+      <AddTweet openAddTweet={openAddTweet} setOpenAddTweet={setOpenAddTweet} />
     </Box>
   );
 };

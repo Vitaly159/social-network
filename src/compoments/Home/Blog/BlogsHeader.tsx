@@ -30,12 +30,12 @@ const useStyles = makeStyles({
   form: {
     width: "100%",
     position: "relative",
-    // top: "50%",
-    // transform: "translateY(-50%)",
     marginLeft: 10,
   },
   application: {
-    padding: "10px 0",
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "10px 20px",
     borderBottom: "1px rgb(230, 230, 230) solid",
   },
   buttonTwite: {
@@ -111,7 +111,7 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
       </Box>
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
-          <Box>
+          <Box style={{paddingLeft: 20}}>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           </Box>
           <Box className={classes.form}>
@@ -128,11 +128,16 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
         <Box>Отвечать могут все пользователи</Box>
       </Box>
       <Box className={classes.application}>
+        <Box>
+
+        
         <AddPhotoAlternateIcon />
         <GifIcon />
         <EqualizerIcon />
         <SentimentVerySatisfiedIcon />
         <EventIcon />
+        </Box>
+        <Box>
         {inputTextRef.current.length > 0 && (
           <Box className={classes.progressBar}>
             <span>{textBar}</span>
@@ -154,6 +159,7 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
         )}
 
         <Button className={classes.buttonTwite}>Твитнуть</Button>
+        </Box>
       </Box>
       <Box className={classes.space} />
     </Box>

@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import addNoteSlice from '../addNoteSlice'
+import Tweets from '../reducers/Tweets'
 
 export const store = configureStore({
   reducer: {
-    notes: addNoteSlice
+    tweets: Tweets
   },
 })
 

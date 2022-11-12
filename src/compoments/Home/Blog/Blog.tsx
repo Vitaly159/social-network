@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+//material ui
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Box, Avatar, Typography } from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
+//store
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { getTweets } from "../../../reducers/Tweets";
 
 import { BlogsHeader } from "./BlogsHeader";
 
@@ -52,89 +56,66 @@ const useStyles = makeStyles({
 
 export const Blog: React.FC = (): React.ReactElement => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const tweets = useAppSelector((state) => state.tweets.tweets);
+
+  const fetchGetTweets = () => {
+    fetch('https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1/', {
+      method: "GET",
+    }).then((res) => {      
+      return res.json()
+    })
+    .then((json) => {
+      dispatch(getTweets(json))
+    })
+  }
+
+  useEffect(()=>{
+    fetchGetTweets();
+  }, [])
 
   return (
     <Paper>
       <BlogsHeader />
 
-      <Box className={classes.post}>
-        <Box>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </Box>
-
-        <Box>
+      {tweets.map((tweet) => (
+        <Box key={tweet.id} className={classes.post}>
           <Box>
-            <Box className={classes.names}>
-              <Typography className={classes.myName}>Vitaly</Typography>
-              <Typography className={classes.friendsName}>@Vlad</Typography>
-            </Box>
-            <Box className={classes.postsText}>
-              Президент РФ Владимир Путин намерен лично обсудить с россиянами,
-              как обстоит дело с поддержкой мобилизованных. Об этом заявил сам
-              российский лидер.
-            </Box>
+            <Avatar alt="Remy Sharp" src={tweet.user.avatar} />
           </Box>
-          <Box className={classes.icons}>
-            <Box>
-              <ChatBubbleOutlineIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
-            <Box>
-              <RepeatIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
-            <Box>
-              <FavoriteBorderIcon className={classes.icon} />{" "}
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
 
-            <Box>
-              <ReplyIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-
-      <Box className={classes.post}>
-        <Box>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </Box>
-
-        <Box>
           <Box>
-            <Box className={classes.names}>
-              <Typography className={classes.myName}>Vitaly</Typography>
-              <Typography className={classes.friendsName}>@Vlad</Typography>
-            </Box>
-            <Box className={classes.postsText}>
-              Президент РФ Владимир Путин намерен лично обсудить с россиянами,
-              как обстоит дело с поддержкой мобилизованных. Об этом заявил сам
-              российский лидер.
-            </Box>
-          </Box>
-          <Box className={classes.icons}>
             <Box>
-              <ChatBubbleOutlineIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
+              <Box className={classes.names}>
+                <Typography
+                  className={classes.myName}
+                >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
+                <Typography className={classes.friendsName}>@Vlad</Typography>
+              </Box>
+              <Box className={classes.postsText}>{tweet.text}</Box>
             </Box>
-            <Box>
-              <RepeatIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
-            <Box>
-              <FavoriteBorderIcon className={classes.icon} />{" "}
-              <span style={{ top: -8, position: "relative" }}>1</span>
-            </Box>
+            <Box className={classes.icons}>
+              <Box>
+                <ChatBubbleOutlineIcon className={classes.icon} />
+                <span style={{ top: -8, position: "relative" }}>1</span>
+              </Box>
+              <Box>
+                <RepeatIcon className={classes.icon} />
+                <span style={{ top: -8, position: "relative" }}>1</span>
+              </Box>
+              <Box>
+                <FavoriteBorderIcon className={classes.icon} />{" "}
+                <span style={{ top: -8, position: "relative" }}>1</span>
+              </Box>
 
-            <Box>
-              <ReplyIcon className={classes.icon} />
-              <span style={{ top: -8, position: "relative" }}>1</span>
+              <Box>
+                <ReplyIcon className={classes.icon} />
+                <span style={{ top: -8, position: "relative" }}>1</span>
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Box>
-
+      ))}
     </Paper>
   );
 };

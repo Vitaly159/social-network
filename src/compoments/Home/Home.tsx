@@ -3,7 +3,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
 //компоненты
-import { ButtonsIcons } from "./IconsButtons";
+import { ButtonsIcons } from "./IconsButtons/IconsButtons";
 import { Recommendations } from "./Recommendations";
 import { Blog } from "./Blog/Blog";
 
