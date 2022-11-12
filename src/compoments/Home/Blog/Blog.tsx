@@ -59,18 +59,19 @@ export const Blog: React.FC = (): React.ReactElement => {
   const dispatch = useAppDispatch();
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
-  useEffect(() => {
-    const fetchGetTweets = () => {
-      fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1/", {
-        method: "GET",
+  const fetchGetTweets = () => {
+    fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1/", {
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
       })
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          dispatch(getTweets(json));
-        });
-    };
+      .then((json) => {
+        dispatch(getTweets(json));
+      });
+  };
+
+  useEffect(() => {
     fetchGetTweets();
   }, [dispatch]);
 
