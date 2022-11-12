@@ -72,7 +72,7 @@ export const Blog: React.FC = (): React.ReactElement => {
         });
     };
     fetchGetTweets();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Paper>
