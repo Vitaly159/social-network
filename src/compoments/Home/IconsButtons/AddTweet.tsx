@@ -168,7 +168,8 @@ export const AddTweet = ({
   };
 
   const clickAddTweet = () => {
-    const newTweet = {
+    if (inputTextRef.current.trim().length > 0) {
+      const newTweet = {
         id: uuid(),
         user: {
           firstName: user[0].user.firstName,
@@ -176,12 +177,13 @@ export const AddTweet = ({
           avatar: user[0].user.avatar,
         },
         text: inputTextRef.current,
-    };
+      };
 
-    dispatch(onAddTweet(newTweet));
-    handleClose();
-    postReq(newTweet);
-    inputTextRef.current = "";
+      dispatch(onAddTweet(newTweet));
+      handleClose();
+      postReq(newTweet);
+      inputTextRef.current = "";
+    }
   };
 
   return (

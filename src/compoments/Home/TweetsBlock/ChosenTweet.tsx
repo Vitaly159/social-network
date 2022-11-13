@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
-//material ui
+import React from "react";
+import { Box, Avatar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Box, Avatar, Typography } from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
-//store
-import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { getTweets } from "../../../reducers/Tweets";
-
-import axios from "axios";
-
-
-import { BlogsHeader } from "./BlogsHeader";
+import { Dispatch, SetStateAction } from "react";
 
 const useStyles = makeStyles({
   post: {
@@ -40,6 +32,7 @@ const useStyles = makeStyles({
   },
   postsText: {
     padding: "0 6px",
+    wordBreak: "break-all",
   },
   icons: {
     display: "flex",
@@ -57,42 +50,52 @@ const useStyles = makeStyles({
   },
 });
 
-export const Blog: React.FC = (): React.ReactElement => {
+type UsersTweet = {
+  firstName: string;
+  secondName: string;
+  avatar: string;
+};
+
+type TweetType = {
+  id: string;
+  user: UsersTweet;
+  text: string;
+};
+
+interface Props {
+  showChosenTweet: (TweetType | undefined)[];
+  setShowChosenTweet: Dispatch<SetStateAction<(TweetType | undefined)[]>>;
+}
+
+export const ChosenTweet = ({
+  showChosenTweet,
+  setShowChosenTweet,
+}: Props): React.ReactElement => {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
-  const tweets = useAppSelector((state) => state.tweets.tweets);
-
-  useEffect(() => {
-    const postReq = async () => {
-      const {data} = await axios.get(
-        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1"
-      )
-      dispatch(getTweets(data))      
-    };
-    postReq()
-  }, [dispatch]);
-
-  
 
   return (
-    <Paper>
-      <BlogsHeader />
-
-      {tweets.slice().reverse().map((tweet) => (
-        <Box key={tweet['_id']} className={classes.post}>
+    <>
+      {showChosenTweet[0] && (
+        <Box className={classes.post}>
+          <Box onClick={()=>setShowChosenTweet([])}>back</Box>
           <Box>
-            <Avatar alt="Remy Sharp" src={tweet.user.avatar && tweet.user.avatar} />
+            <Avatar
+              alt="Remy Sharp"
+              src={showChosenTweet[0] && showChosenTweet[0].user.avatar}
+            />
           </Box>
 
-          <Box>
+          <Box style={{ width: "100%" }}>
             <Box>
               <Box className={classes.names}>
                 <Typography
                   className={classes.myName}
-                >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
-                <Typography className={classes.friendsName}>@userName</Typography>
+                >{`${showChosenTweet[0].user.firstName} ${showChosenTweet[0].user.secondName}`}</Typography>
+                <Typography className={classes.friendsName}>
+                  @userName
+                </Typography>
               </Box>
-              <Box className={classes.postsText}>{tweet.text}</Box>
+              <Box className={classes.postsText}>{showChosenTweet[0].text}</Box>
             </Box>
             <Box className={classes.icons}>
               <Box>
@@ -115,7 +118,7 @@ export const Blog: React.FC = (): React.ReactElement => {
             </Box>
           </Box>
         </Box>
-      ))}
-    </Paper>
+      )}
+    </>
   );
 };

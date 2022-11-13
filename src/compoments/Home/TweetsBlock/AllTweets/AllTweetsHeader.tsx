@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import uuid from "react-uuid";
 
 import {
   makeStyles,
@@ -14,8 +16,8 @@ import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfie
 import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { getUser } from "../../../reducers/Tweets";
+import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
+import { getUser, onAddTweet } from "../../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   header: {
@@ -92,7 +94,7 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-export const BlogsHeader: React.FC = (): React.ReactElement => {
+export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const classes = useStyles();
   //   const classesBar = useStylesBar();
   const dispatch = useAppDispatch();
@@ -121,6 +123,31 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
     if (value.length < 281) {
       inputTextRef.current = value;
       setTextBar(280 - value.length);
+    }
+  };
+
+  const postReq = async (value: any) => {
+    await axios.post(
+      "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
+      value
+    );
+  };
+
+  const clickAddTweet = () => {
+    if (inputTextRef.current.trim().length > 0) {
+      const newTweet = {
+        id: uuid(),
+        user: {
+          firstName: user[0].user.firstName,
+          secondName: user[0].user.secondName,
+          avatar: user[0].user.avatar,
+        },
+        text: inputTextRef.current,
+      };
+
+      dispatch(onAddTweet(newTweet));
+      postReq(newTweet);
+      inputTextRef.current = "";
     }
   };
 
@@ -179,7 +206,9 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
             </Box>
           )}
 
-          <Button className={classes.buttonTwite}>Твитнуть</Button>
+          <Button className={classes.buttonTwite} onClick={clickAddTweet}>
+            Твитнуть
+          </Button>
         </Box>
       </Box>
       <Box className={classes.space} />

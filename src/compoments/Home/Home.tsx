@@ -5,7 +5,7 @@ import { Grid, Container } from "@material-ui/core";
 //компоненты
 import { ButtonsIcons } from "./IconsButtons/IconsButtons";
 import { Recommendations } from "./Recommendations";
-import { Blog } from "./Blog/Blog";
+import { TweetsBlock } from "./TweetsBlock/TweetsBlock";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -27,7 +27,7 @@ export const Home: React.FC = (): React.ReactElement => {
           <ButtonsIcons />
         </Grid>
         <Grid item xs={6}>
-          <Blog />
+          <TweetsBlock />
         </Grid>
         <Grid item xs={3}>
           <Recommendations />
