@@ -90,7 +90,7 @@ export const Blog: React.FC = (): React.ReactElement => {
                 <Typography
                   className={classes.myName}
                 >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
-                <Typography className={classes.friendsName}>@Vlad</Typography>
+                <Typography className={classes.friendsName}>@userName</Typography>
               </Box>
               <Box className={classes.postsText}>{tweet.text}</Box>
             </Box>
