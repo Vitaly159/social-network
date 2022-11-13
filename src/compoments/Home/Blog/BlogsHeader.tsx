@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import {
   makeStyles,
   withStyles,
-//   Theme,
-//   createStyles,
+  //   Theme,
+  //   createStyles,
 } from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
@@ -13,6 +13,9 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
+
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { getUser } from "../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   header: {
@@ -91,8 +94,25 @@ const CssTextField = withStyles({
 
 export const BlogsHeader: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-//   const classesBar = useStylesBar();
+  //   const classesBar = useStylesBar();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.tweets.user);
   const inputTextRef = useRef("");
+
+  useEffect(() => {
+    const fetchGetTweets = () => {
+      fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/user/", {
+        method: "GET",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((json) => {
+          dispatch(getUser(json));
+        });
+    };
+    fetchGetTweets();
+  }, [dispatch]);
 
   const [textBar, setTextBar] = useState<number>(280);
 
@@ -110,55 +130,56 @@ export const BlogsHeader: React.FC = (): React.ReactElement => {
         <Typography className={classes.header}>Главная</Typography>
       </Box>
       <Box className={classes.createTwiteBlock}>
-        <Box className={classes.writingField}>
-          <Box style={{paddingLeft: 20}}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        {user[0] && (
+          <Box className={classes.writingField}>
+            <Box style={{ paddingLeft: 20 }}>
+              <Avatar alt="Remy Sharp" src={user[0].user.avatar} />
+            </Box>
+            <Box className={classes.form}>
+              <CssTextField
+                placeholder={"Что происходит?"}
+                label={null}
+                multiline
+                style={{ width: "90%" }}
+                onChange={handleText}
+                inputProps={{ maxLength: 280 }}
+              />
+            </Box>
           </Box>
-          <Box className={classes.form}>
-            <CssTextField
-              placeholder="Что происходит?"
-              label={null}
-              multiline
-              style={{ width: "90%" }}
-              onChange={handleText}
-              inputProps={{ maxLength: 280 }}
-            />
-          </Box>
-        </Box>
+        )}
+
         <Box>Отвечать могут все пользователи</Box>
       </Box>
       <Box className={classes.application}>
         <Box>
-
-        
-        <AddPhotoAlternateIcon />
-        <GifIcon />
-        <EqualizerIcon />
-        <SentimentVerySatisfiedIcon />
-        <EventIcon />
+          <AddPhotoAlternateIcon />
+          <GifIcon />
+          <EqualizerIcon />
+          <SentimentVerySatisfiedIcon />
+          <EventIcon />
         </Box>
         <Box>
-        {inputTextRef.current.length > 0 && (
-          <Box className={classes.progressBar}>
-            <span>{textBar}</span>
-            <CircularProgress
-              variant="determinate"
-              style={{ color: "rgb(220,220,220)", position: "absolute" }}
-              size={20}
-              thickness={4}
-              value={100}
-            />
-            <CircularProgress
-              variant="determinate"
-              style={{ color: "blue", position: "absolute" }}
-              size={20}
-              thickness={4}
-              value={(100 / 280) * inputTextRef.current.length}
-            />
-          </Box>
-        )}
+          {inputTextRef.current.length > 0 && (
+            <Box className={classes.progressBar}>
+              <span>{textBar}</span>
+              <CircularProgress
+                variant="determinate"
+                style={{ color: "rgb(220,220,220)", position: "absolute" }}
+                size={20}
+                thickness={4}
+                value={100}
+              />
+              <CircularProgress
+                variant="determinate"
+                style={{ color: "blue", position: "absolute" }}
+                size={20}
+                thickness={4}
+                value={(100 / 280) * inputTextRef.current.length}
+              />
+            </Box>
+          )}
 
-        <Button className={classes.buttonTwite}>Твитнуть</Button>
+          <Button className={classes.buttonTwite}>Твитнуть</Button>
         </Box>
       </Box>
       <Box className={classes.space} />

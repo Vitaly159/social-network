@@ -89,7 +89,7 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
     setOpenSignIn(false);
   };
 
-  const clickEnter = email === "hi" && password === "123" ? "/home" : "/";
+  // const clickEnter = email === "hi" && password === "123" ? "/home" : "/";
 
   return (
     <Dialog
@@ -119,7 +119,7 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
         value={password}
         onChange={changePassword}
       />
-      <Button component={Link} to={clickEnter} className={classes.buttonDialog}>
+      <Button component={Link} to={"/home"} className={classes.buttonDialog}>
         Войти
       </Button>
     </Dialog>

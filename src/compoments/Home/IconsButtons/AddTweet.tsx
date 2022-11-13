@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import axios from "axios";
+import uuid from "react-uuid";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -11,7 +13,10 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
+
 import { Dispatch, SetStateAction } from "react";
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { onAddTweet } from "../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -135,6 +140,9 @@ export const AddTweet = ({
   setOpenAddTweet,
 }: Props): React.ReactElement => {
   const classes = useStyles();
+  const user = useAppSelector((state) => state.tweets.user);
+
+  const dispatch = useAppDispatch();
 
   const inputTextRef = useRef("");
 
@@ -152,13 +160,37 @@ export const AddTweet = ({
     setOpenAddTweet(false);
   };
 
+  const postReq = async (value: any) => {
+    await axios.post(
+      "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
+      value
+    );
+  };
+
+  const clickAddTweet = () => {
+    const newTweet = {
+        id: uuid(),
+        user: {
+          firstName: user[0].user.firstName,
+          secondName: user[0].user.secondName,
+          avatar: user[0].user.avatar,
+        },
+        text: inputTextRef.current,
+    };
+
+    dispatch(onAddTweet(newTweet));
+    handleClose();
+    postReq(newTweet);
+    inputTextRef.current = "";
+  };
+
   return (
     <Dialog
       open={openAddTweet}
       onClose={handleClose}
       className={classes.wrapper}
     >
-      <DialogTitle id="alert-dialog-title" className={classes.dialogTitle}>
+      <DialogTitle className={classes.dialogTitle}>
         <Box className={classes.dialogHeader}>
           <CloseIcon onClick={handleClose} />
           <Typography
@@ -171,7 +203,7 @@ export const AddTweet = ({
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
           <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+            <Avatar alt="Remy Sharp" src={user[0] && user[0].user.avatar} />
           </Box>
           <Box className={classes.form}>
             <CssTextField
@@ -214,7 +246,9 @@ export const AddTweet = ({
             </Box>
           )}
 
-          <Button className={classes.buttonTwite}>Твитнуть</Button>
+          <Button className={classes.buttonTwite} onClick={clickAddTweet}>
+            Твитнуть
+          </Button>
         </Box>
       </Box>
     </Dialog>

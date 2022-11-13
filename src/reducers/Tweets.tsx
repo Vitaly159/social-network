@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import uuid from "react-uuid";
 
-type User = {
+type UsersTweet = {
   firstName: string;
   secondName: string;
   avatar: string;
@@ -9,27 +8,40 @@ type User = {
 
 type TweetType = {
   id: string;
-  user: User;
+  user: UsersTweet;
   text: string;
 };
 
+type User = {
+  id: string;
+  user: UsersTweet;
+};
+
 type States = {
+  user: User[];
   tweets: TweetType[];
 };
 
 const initialState: States = {
-  tweets: []
+  user: [],
+  tweets: [],
 };
 
 export const Tweets = createSlice({
   name: "tweets",
   initialState,
   reducers: {
-    getTweets(state, action: PayloadAction<any[]>) {
+    getTweets(state, action: PayloadAction<TweetType[]>) {
       state.tweets = action.payload;
+    },
+    getUser(state, action: PayloadAction<User[]>) {
+      state.user = action.payload;
+    },
+    onAddTweet(state, action) {
+      state.tweets.push(action.payload);
     },
   },
 });
 
-export const { getTweets } = Tweets.actions;
+export const { getTweets, getUser, onAddTweet } = Tweets.actions;
 export default Tweets.reducer;

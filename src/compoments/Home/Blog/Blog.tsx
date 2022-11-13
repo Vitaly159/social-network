@@ -10,6 +10,9 @@ import ReplyIcon from "@material-ui/icons/Reply";
 import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
 import { getTweets } from "../../../reducers/Tweets";
 
+import axios from "axios";
+
+
 import { BlogsHeader } from "./BlogsHeader";
 
 const useStyles = makeStyles({
@@ -60,28 +63,25 @@ export const Blog: React.FC = (): React.ReactElement => {
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
   useEffect(() => {
-    const fetchGetTweets = () => {
-      fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1/", {
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          dispatch(getTweets(json));
-        });
+    const postReq = async () => {
+      const {data} = await axios.get(
+        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1"
+      )
+      dispatch(getTweets(data))      
     };
-    fetchGetTweets();
+    postReq()
   }, [dispatch]);
+
+  
 
   return (
     <Paper>
       <BlogsHeader />
 
-      {tweets.map((tweet) => (
-        <Box key={tweet.id} className={classes.post}>
+      {tweets.slice().reverse().map((tweet) => (
+        <Box key={tweet['_id']} className={classes.post}>
           <Box>
-            <Avatar alt="Remy Sharp" src={tweet.user.avatar} />
+            <Avatar alt="Remy Sharp" src={tweet.user.avatar && tweet.user.avatar} />
           </Box>
 
           <Box>
