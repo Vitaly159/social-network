@@ -16,7 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { Dispatch, SetStateAction } from "react";
 import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { onAddTweet } from "../../../reducers/Tweets";
+import { onAddTweet, setShowError } from "../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -160,12 +160,24 @@ export const AddTweet = ({
     setOpenAddTweet(false);
   };
 
-  const postReq = async (value: any) => {
-    await axios.post(
-      "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
-      value
-    );
-  };
+  async function postReq(value: any) {
+    await axios
+      .post(
+        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
+        value
+      )
+      .then((res) => {
+        dispatch(onAddTweet(value));
+        inputTextRef.current = "";
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(setShowError(true))
+        setTimeout(()=>{
+          dispatch(setShowError(false))
+        }, 5000)
+      });
+  }
 
   const clickAddTweet = () => {
     if (inputTextRef.current.trim().length > 0) {
@@ -179,7 +191,6 @@ export const AddTweet = ({
         text: inputTextRef.current,
       };
 
-      dispatch(onAddTweet(newTweet));
       handleClose();
       postReq(newTweet);
       inputTextRef.current = "";

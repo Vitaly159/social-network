@@ -2,12 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import uuid from "react-uuid";
 
-import {
-  makeStyles,
-  withStyles,
-  //   Theme,
-  //   createStyles,
-} from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import GifIcon from "@material-ui/icons/Gif";
@@ -15,9 +10,9 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
-import { getUser, onAddTweet } from "../../../../reducers/Tweets";
+import { getUser, onAddTweet, setShowError } from "../../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   header: {
@@ -43,7 +38,7 @@ const useStyles = makeStyles({
     padding: "10px 20px",
     borderBottom: "1px rgb(230, 230, 230) solid",
   },
-  buttonTwite: {
+  buttonTweet: {
     width: "100px",
     backgroundColor: "DeepSkyBlue",
     borderRadius: "200px",
@@ -53,6 +48,10 @@ const useStyles = makeStyles({
     fontWeight: 600,
     "&:hover": {
       backgroundColor: "rgba(0, 191, 255, 0.54)",
+    },
+    "&:disabled": {
+      backgroundColor: "rgb(220,220,220)",
+      color: "rgb(140,140,140)",
     },
   },
   space: {
@@ -64,18 +63,20 @@ const useStyles = makeStyles({
     width: 100,
     textAlign: "center",
   },
+  errorBlock: {
+    padding: "5px 15px 15px",
+  },
+  error: {
+    backgroundColor: "rgba(255,0,0,0.1)",
+    display: "flex",
+    padding: "10px",
+  },
+  iconWarning: {
+    color: "red",
+    fontSize: 16,
+    marginRight: 5,
+  },
 });
-
-// const useStylesBar = makeStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       display: "flex",
-//       "& > * + *": {
-//         marginLeft: theme.spacing(2),
-//       },
-//     },
-//   })
-// );
 
 const CssTextField = withStyles({
   root: {
@@ -96,9 +97,10 @@ const CssTextField = withStyles({
 
 export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-  //   const classesBar = useStylesBar();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.tweets.user);
+  const showError = useAppSelector((state) => state.tweets.showError);
+
   const inputTextRef = useRef("");
 
   useEffect(() => {
@@ -126,13 +128,6 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     }
   };
 
-  const postReq = async (value: any) => {
-    await axios.post(
-      "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
-      value
-    );
-  };
-
   const clickAddTweet = () => {
     if (inputTextRef.current.trim().length > 0) {
       const newTweet = {
@@ -145,11 +140,28 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
         text: inputTextRef.current,
       };
 
-      dispatch(onAddTweet(newTweet));
       postReq(newTweet);
-      inputTextRef.current = "";
     }
   };
+
+  async function postReq(value: any) {
+    await axios
+      .post(
+        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
+        value
+      )
+      .then((res) => {
+        dispatch(onAddTweet(value));
+        inputTextRef.current = "";
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(setShowError(true))
+        setTimeout(()=>{
+          dispatch(setShowError(false))
+        }, 5000)
+      });
+  }
 
   return (
     <Box>
@@ -169,6 +181,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
                 multiline
                 style={{ width: "90%" }}
                 onChange={handleText}
+                value={inputTextRef.current}
                 inputProps={{ maxLength: 280 }}
               />
             </Box>
@@ -206,11 +219,24 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
             </Box>
           )}
 
-          <Button className={classes.buttonTwite} onClick={clickAddTweet}>
+          <Button
+            className={classes.buttonTweet}
+            onClick={clickAddTweet}
+            disabled={inputTextRef.current.trim().length === 0 ? true : false}
+          >
             Твитнуть
           </Button>
         </Box>
       </Box>
+      {showError && (
+        <Box className={classes.errorBlock}>
+          <Box className={classes.error}>
+            <ErrorOutlineIcon className={classes.iconWarning} />
+            <span>Ошибка при добавлении твита</span>
+          </Box>
+        </Box>
+      )}
+
       <Box className={classes.space} />
     </Box>
   );

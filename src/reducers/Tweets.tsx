@@ -20,11 +20,13 @@ type User = {
 type States = {
   user: User[];
   tweets: TweetType[];
+  showError: boolean
 };
 
 const initialState: States = {
   user: [],
   tweets: [],
+  showError: false,
 };
 
 export const Tweets = createSlice({
@@ -40,8 +42,11 @@ export const Tweets = createSlice({
     onAddTweet(state, action) {
       state.tweets.push(action.payload);
     },
+    setShowError(state, action: PayloadAction<boolean>) {
+      state.showError = action.payload
+    }
   },
 });
 
-export const { getTweets, getUser, onAddTweet } = Tweets.actions;
+export const { getTweets, getUser, onAddTweet, setShowError } = Tweets.actions;
 export default Tweets.reducer;

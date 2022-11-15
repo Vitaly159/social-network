@@ -5,6 +5,7 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Dispatch, SetStateAction } from "react";
 
 const useStyles = makeStyles({
@@ -48,6 +49,14 @@ const useStyles = makeStyles({
       backgroundColor: "rgb(240,240,240)",
     },
   },
+  backBlock: {
+    padding: "10px",
+    borderBottom: "1px rgb(220,220,220) solid",
+  },
+  backArrow: {
+    cursor: 'pointer',
+    color: 'DeepSkyBlue'
+  }
 });
 
 type UsersTweet = {
@@ -73,11 +82,17 @@ export const ChosenTweet = ({
 }: Props): React.ReactElement => {
   const classes = useStyles();
 
+  const clickBack = () => {
+    setShowChosenTweet([])
+  }
+
   return (
     <>
+      <Box className={classes.backBlock}>
+        <ArrowBackIcon className={classes.backArrow} onClick={clickBack} />
+      </Box>
       {showChosenTweet[0] && (
         <Box className={classes.post}>
-          <Box onClick={()=>setShowChosenTweet([])}>back</Box>
           <Box>
             <Avatar
               alt="Remy Sharp"
