@@ -90,7 +90,7 @@ export const AllTweets = ({
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
   const clickOnTweet = (value: any): void => {
-    const tweet = [tweets.find((tweet) => tweet["_id"] === value)];
+    const tweet = [tweets.find((tweet) => tweet["id"] === value)];
     setShowChosenTweet(tweet);
   };
 
@@ -106,7 +106,8 @@ export const AllTweets = ({
             <Box
               key={index}
               className={classes.post}
-              onClick={() => clickOnTweet(tweet["_id"])}
+              onClick={() => {clickOnTweet(tweet["id"]);
+              }}
             >
               <Box>
                 <Avatar

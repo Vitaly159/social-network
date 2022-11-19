@@ -181,6 +181,7 @@ export const AddTweet = ({
       .then((res) => {
         dispatch(onAddTweet(value));
         dispatch(setShowError(false));
+        // inputRef.current.value = "";
       })
       .catch((err) => {
         dispatch(setShowError(true));
@@ -206,7 +207,6 @@ export const AddTweet = ({
 
         handleClose();
         postReq(newTweet);
-        inputRef.current.value = "";
       } else {
         handleClose();
         dispatch(setShowError(true));
@@ -236,7 +236,7 @@ export const AddTweet = ({
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
           <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="Remy Sharp" src={user[0] && user[0].user.avatar} />
+            <Avatar alt="me" src={user[0] && user[0].user.avatar} />
           </Box>
           <Box className={classes.form}>
             <CssTextField
