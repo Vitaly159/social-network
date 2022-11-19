@@ -34,11 +34,13 @@ const useStyles = makeStyles({
   postsText: {
     padding: "0 6px",
     wordBreak: "break-all",
+    fontSize: 20
   },
   icons: {
     display: "flex",
     padding: "10px 52px 3px 0",
     justifyContent: "space-between",
+    borderTop: "1px rgb(200,200,200) solid"
   },
   icon: {
     fontSize: 16,
@@ -56,6 +58,11 @@ const useStyles = makeStyles({
   backArrow: {
     cursor: 'pointer',
     color: 'DeepSkyBlue'
+  },
+  publishedTiem: {
+    fontSize: 14,
+    opacity: 0.5,
+    padding: "10px 5px"
   }
 });
 
@@ -69,6 +76,7 @@ type TweetType = {
   id: string;
   user: UsersTweet;
   text: string;
+  time: string
 };
 
 interface Props {
@@ -111,7 +119,9 @@ export const ChosenTweet = ({
                 </Typography>
               </Box>
               <Box className={classes.postsText}>{showChosenTweet[0].text}</Box>
+              <Box className={classes.publishedTiem}>{showChosenTweet[0].time}</Box>
             </Box>
+
             <Box className={classes.icons}>
               <Box>
                 <ChatBubbleOutlineIcon className={classes.icon} />

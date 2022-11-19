@@ -100,8 +100,22 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.tweets.user);
   const showError = useAppSelector((state) => state.tweets.showError);
+  const [isAddingTweet, setIsAddingTweet] = useState(false);
 
-  const inputTextRef = useRef("");
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  let textInput = inputRef.current ? inputRef.current.value : "";
+
+  const date = new Date();
+
+  const options: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  }
+
+  const tweetTime = date.toLocaleString("ru", options);
 
   useEffect(() => {
     const fetchGetTweets = () => {
@@ -123,24 +137,33 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (e.target as HTMLInputElement).value;
     if (value.length < 281) {
-      inputTextRef.current = value;
       setTextBar(280 - value.length);
+      textInput = value;
     }
   };
 
   const clickAddTweet = () => {
-    if (inputTextRef.current.trim().length > 0) {
-      const newTweet = {
-        id: uuid(),
-        user: {
-          firstName: user[0].user.firstName,
-          secondName: user[0].user.secondName,
-          avatar: user[0].user.avatar,
-        },
-        text: inputTextRef.current,
-      };
+    if (user[0]) {
+      if (textInput.trim().length > 0) {
+        const newTweet = {
+          id: uuid(),
+          user: {
+            firstName: user[0].user.firstName,
+            secondName: user[0].user.secondName,
+            avatar: user[0].user.avatar,
+          },
+          text: textInput,
+          time: tweetTime
+        };
 
-      postReq(newTweet);
+        postReq(newTweet);
+        setIsAddingTweet(true);
+      }
+    } else {
+      dispatch(setShowError(true));
+      setTimeout(() => {
+        dispatch(setShowError(false));
+      }, 8000);
     }
   };
 
@@ -152,14 +175,16 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
       )
       .then((res) => {
         dispatch(onAddTweet(value));
-        inputTextRef.current = "";
+        setIsAddingTweet(false);
+        inputRef.current.value = "";
+        setTextBar(280);
       })
       .catch((err) => {
-        console.log(err);
-        dispatch(setShowError(true))
-        setTimeout(()=>{
-          dispatch(setShowError(false))
-        }, 5000)
+        setIsAddingTweet(false);
+        dispatch(setShowError(true));
+        setTimeout(() => {
+          dispatch(setShowError(false));
+        }, 8000);
       });
   }
 
@@ -169,24 +194,23 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
         <Typography className={classes.header}>Главная</Typography>
       </Box>
       <Box className={classes.createTwiteBlock}>
-        {user[0] && (
-          <Box className={classes.writingField}>
-            <Box style={{ paddingLeft: 20 }}>
-              <Avatar alt="Remy Sharp" src={user[0].user.avatar} />
-            </Box>
-            <Box className={classes.form}>
-              <CssTextField
-                placeholder={"Что происходит?"}
-                label={null}
-                multiline
-                style={{ width: "90%" }}
-                onChange={handleText}
-                value={inputTextRef.current}
-                inputProps={{ maxLength: 280 }}
-              />
-            </Box>
+        <Box className={classes.writingField}>
+          <Box style={{ paddingLeft: 20 }}>
+            <Avatar alt="Remy Sharp" src={user[0] ? user[0].user.avatar : ""} />
           </Box>
-        )}
+          <Box className={classes.form}>
+            <CssTextField
+              inputRef={inputRef}
+              placeholder={"Что происходит?"}
+              label={null}
+              multiline
+              style={{ width: "90%" }}
+              onChange={handleText}
+              value={textInput ? textInput : ""}
+              inputProps={{ maxLength: 280 }}
+            />
+          </Box>
+        </Box>
 
         <Box>Отвечать могут все пользователи</Box>
       </Box>
@@ -199,7 +223,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
           <EventIcon />
         </Box>
         <Box>
-          {inputTextRef.current.length > 0 && (
+          {textInput.length > 0 && (
             <Box className={classes.progressBar}>
               <span>{textBar}</span>
               <CircularProgress
@@ -214,7 +238,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
                 style={{ color: "blue", position: "absolute" }}
                 size={20}
                 thickness={4}
-                value={(100 / 280) * inputTextRef.current.length}
+                value={(100 / 280) * textInput.length}
               />
             </Box>
           )}
@@ -222,9 +246,13 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
           <Button
             className={classes.buttonTweet}
             onClick={clickAddTweet}
-            disabled={inputTextRef.current.trim().length === 0 ? true : false}
+            disabled={textInput.trim().length === 0 ? true : false}
           >
-            Твитнуть
+            {isAddingTweet ? (
+              <CircularProgress style={{ color: "white" }} size={20} />
+            ) : (
+              "Твитнуть"
+            )}
           </Button>
         </Box>
       </Box>

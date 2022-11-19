@@ -144,14 +144,26 @@ export const AddTweet = ({
 
   const dispatch = useAppDispatch();
 
-  const inputTextRef = useRef("");
+  const date = new Date();
+
+  const options: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  }
+
+  const tweetTime = date.toLocaleString("ru", options);
+
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const [textBar, setTextBar] = useState<number>(280);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (e.target as HTMLInputElement).value;
     if (value.length < 281) {
-      inputTextRef.current = value;
+      inputRef.current.value = value;
       setTextBar(280 - value.length);
     }
   };
@@ -168,32 +180,40 @@ export const AddTweet = ({
       )
       .then((res) => {
         dispatch(onAddTweet(value));
-        inputTextRef.current = "";
+        dispatch(setShowError(false));
       })
       .catch((err) => {
-        console.log(err);
-        dispatch(setShowError(true))
-        setTimeout(()=>{
-          dispatch(setShowError(false))
-        }, 5000)
+        dispatch(setShowError(true));
+        setTimeout(() => {
+          dispatch(setShowError(false));
+        }, 8000);
       });
   }
 
   const clickAddTweet = () => {
-    if (inputTextRef.current.trim().length > 0) {
-      const newTweet = {
-        id: uuid(),
-        user: {
-          firstName: user[0].user.firstName,
-          secondName: user[0].user.secondName,
-          avatar: user[0].user.avatar,
-        },
-        text: inputTextRef.current,
-      };
+    if (inputRef.current.value.trim().length > 0) {
+      if (user[0]) {
+        const newTweet = {
+          id: uuid(),
+          user: {
+            firstName: user[0].user.firstName,
+            secondName: user[0].user.secondName,
+            avatar: user[0].user.avatar,
+          },
+          text: inputRef.current.value,
+          time: tweetTime
+        };
 
-      handleClose();
-      postReq(newTweet);
-      inputTextRef.current = "";
+        handleClose();
+        postReq(newTweet);
+        inputRef.current.value = "";
+      } else {
+        handleClose();
+        dispatch(setShowError(true));
+        setTimeout(() => {
+          dispatch(setShowError(false));
+        }, 8000);
+      }
     }
   };
 
@@ -220,6 +240,8 @@ export const AddTweet = ({
           </Box>
           <Box className={classes.form}>
             <CssTextField
+              inputRef={inputRef}
+              value={inputRef.current ? inputRef.current.value : ""}
               placeholder="Что происходит?"
               label={null}
               multiline
@@ -239,7 +261,7 @@ export const AddTweet = ({
           <EventIcon />
         </Box>
         <Box>
-          {inputTextRef.current.length > 0 && (
+          {inputRef.current && inputRef.current.value.length !== 0 && (
             <Box className={classes.progressBar}>
               <span>{textBar}</span>
               <CircularProgress
@@ -254,7 +276,7 @@ export const AddTweet = ({
                 style={{ color: "blue", position: "absolute" }}
                 size={20}
                 thickness={4}
-                value={(100 / 280) * inputTextRef.current.length}
+                value={(100 / 280) * inputRef.current.value.length}
               />
             </Box>
           )}

@@ -9,7 +9,6 @@ import { TweetsBlock } from "./TweetsBlock/TweetsBlock";
 
 const useStyles = makeStyles({
   wrapper: {
-    // height: "100vh",
     padding: '0'
   },
   iconButtons: {

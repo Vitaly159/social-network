@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Box, Avatar, Typography } from "@material-ui/core";
@@ -6,12 +6,10 @@ import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
+import CircularProgress from "@material-ui/core/CircularProgress";
 //store
-import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
-import { getTweets } from "../../../../reducers/Tweets";
+import { useAppSelector } from "../../../../hooks/hooks";
 import { Dispatch, SetStateAction } from "react";
-
-import axios from "axios";
 
 import { AllTweetsHeader } from "./AllTweetsHeader";
 
@@ -56,6 +54,15 @@ const useStyles = makeStyles({
       backgroundColor: "rgb(240,240,240)",
     },
   },
+  progressBar: {
+    textAlign: 'center',
+    padding: 20
+  },
+  publishedTiem: {
+    fontSize: 14,
+    opacity: 0.5,
+    padding: "10px 5px"
+  }
 });
 
 type UsersTweet = {
@@ -68,86 +75,86 @@ type TweetType = {
   id: string;
   user: UsersTweet;
   text: string;
+  time: string
 };
 
 interface Props {
   setShowChosenTweet: Dispatch<SetStateAction<(TweetType | undefined)[]>>;
+  isLoadingTweets: boolean;
 }
 
-export const AllTweets = ({setShowChosenTweet}: Props): React.ReactElement => {
+export const AllTweets = ({
+  setShowChosenTweet,isLoadingTweets
+}: Props): React.ReactElement => {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
-  useEffect(() => {
-    const postReq = async () => {
-      const { data } = await axios.get(
-        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1"
-      );
-      dispatch(getTweets(data));
-    };
-    postReq();
-  }, [dispatch]);
-
   const clickOnTweet = (value: any): void => {
-    const tweet = [tweets.find((tweet) => tweet["_id"] === value)]    
-    setShowChosenTweet(tweet)
+    const tweet = [tweets.find((tweet) => tweet["_id"] === value)];
+    setShowChosenTweet(tweet);
   };
 
   return (
     <Paper>
       <AllTweetsHeader />
 
-      {tweets
-        .slice()
-        .reverse()
-        .map((tweet) => (
-          <Box
-            key={tweet["_id"]}
-            className={classes.post}
-            onClick={() => clickOnTweet(tweet["_id"])}
-          >
-            <Box>
-              <Avatar
-                alt="Remy Sharp"
-                src={tweet.user.avatar && tweet.user.avatar}
-              />
-            </Box>
-
-            <Box style={{ width: "100%" }}>
+      {!isLoadingTweets ? (
+        tweets
+          .slice()
+          .reverse()
+          .map((tweet, index) => (
+            <Box
+              key={index}
+              className={classes.post}
+              onClick={() => clickOnTweet(tweet["_id"])}
+            >
               <Box>
-                <Box className={classes.names}>
-                  <Typography
-                    className={classes.myName}
-                  >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
-                  <Typography className={classes.friendsName}>
-                    @userName
-                  </Typography>
-                </Box>
-                <Box className={classes.postsText}>{tweet.text}</Box>
+                <Avatar
+                  alt="Remy Sharp"
+                  src={tweet.user.avatar && tweet.user.avatar}
+                />
               </Box>
-              <Box className={classes.icons}>
-                <Box>
-                  <ChatBubbleOutlineIcon className={classes.icon} />
-                  <span style={{ top: -8, position: "relative" }}>1</span>
-                </Box>
-                <Box>
-                  <RepeatIcon className={classes.icon} />
-                  <span style={{ top: -8, position: "relative" }}>1</span>
-                </Box>
-                <Box>
-                  <FavoriteBorderIcon className={classes.icon} />{" "}
-                  <span style={{ top: -8, position: "relative" }}>1</span>
-                </Box>
 
+              <Box style={{ width: "100%" }}>
                 <Box>
-                  <ReplyIcon className={classes.icon} />
-                  <span style={{ top: -8, position: "relative" }}>1</span>
+                  <Box className={classes.names}>
+                    <Typography
+                      className={classes.myName}
+                    >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
+                    <Typography className={classes.friendsName}>
+                      @userName
+                    </Typography>
+                  </Box>
+                  <Box className={classes.postsText}>{tweet.text}</Box>
+                  <Box className={classes.publishedTiem}>{tweet.time}</Box>
+                </Box>
+                <Box className={classes.icons}>
+                  <Box>
+                    <ChatBubbleOutlineIcon className={classes.icon} />
+                    <span style={{ top: -8, position: "relative" }}>1</span>
+                  </Box>
+                  <Box>
+                    <RepeatIcon className={classes.icon} />
+                    <span style={{ top: -8, position: "relative" }}>1</span>
+                  </Box>
+                  <Box>
+                    <FavoriteBorderIcon className={classes.icon} />{" "}
+                    <span style={{ top: -8, position: "relative" }}>1</span>
+                  </Box>
+
+                  <Box>
+                    <ReplyIcon className={classes.icon} />
+                    <span style={{ top: -8, position: "relative" }}>1</span>
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-        ))}
+          ))
+      ) : (
+        <Box className={classes.progressBar}>
+          <CircularProgress />
+        </Box>
+      )}
     </Paper>
   );
 };

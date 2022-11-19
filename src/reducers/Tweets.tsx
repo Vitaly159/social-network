@@ -10,6 +10,7 @@ type TweetType = {
   id: string;
   user: UsersTweet;
   text: string;
+  time: string;
 };
 
 type User = {
