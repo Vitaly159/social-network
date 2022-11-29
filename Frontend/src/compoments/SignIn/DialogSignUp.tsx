@@ -7,6 +7,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 import { Typography } from "@material-ui/core";
 import { Dispatch, SetStateAction } from "react";
+import React from "react";
 
 const useStyles = makeStyles({
   signInWrapper: {
