@@ -7,4 +7,6 @@ const testSchema = new Scheme({
     age: Number
 });
 
-export const Test = mongoose.model("test", testSchema);
+const test = mongoose.model("test", testSchema);
+
+module.exports = test;
