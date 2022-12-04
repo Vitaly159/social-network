@@ -1,28 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
-import { validationResult, body } from "express-validator";
-
-// const registerValidations = [
-//   validator
-//     .body("name", "Введите E-Mail")
-//     .isString()
-//     .withMessage("Неверный E-Mail")
-//     .isLength({
-//       min: 2,
-//       max: 40,
-//     })
-//     .withMessage("Допустимое количество символов то 1 до 3"),
-//   validator.body("age", "Введите имя").isString().isLength({
-//     min: 1,
-//     max: 3,
-//   }),
-// ];
+import { validationResult } from "express-validator";
+import { registerValidations } from "./validations/register";
 
 const Scheme = mongoose.Schema;
 
 const testSchema = new Scheme({
-  name: String,
-  age: String,
+	email: String,
+	fullname: String,
+	username: String,
+	password: String,
 });
 
 const test = mongoose.model("test", testSchema);
@@ -38,7 +25,7 @@ const data = new test({ name: "messy", age: 40 });
 // get();
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
 function connectDataBase() {
   mongoose
@@ -51,31 +38,21 @@ connectDataBase();
 
 app.post(
   "/test",
-  body("name", "Введите E-Mail")
-    .isString()
-    .withMessage("Неверный E-Mail")
-    .isLength({
-      min: 2,
-      max: 40,
-    })
-    .withMessage("Допустимое количество символов то 1 до 3"),
-  body("age", "Введите имя").isString()
-  .isLength({
-    min: 1,
-    max: 3,
-  })
-,
-
+  registerValidations,
   (req: express.Request, res: express.Response) => {
-	const errors = validationResult(req);
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    test.create({
-	  name: req.body.name,
-	  age: req.body.age,
-	}).then(user => res.json(user));
+    test
+      .create({
+        email: req.body.email,
+        fullname: req.body.fullname,
+        username: req.body.username,
+        password: req.body.password,
+      })
+      .then((user) => res.json(user));
   }
 );
 
