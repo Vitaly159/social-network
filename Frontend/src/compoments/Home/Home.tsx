@@ -9,11 +9,23 @@ import { TweetsBlock } from "./TweetsBlock/TweetsBlock";
 
 const useStyles = makeStyles({
   wrapper: {
-    padding: '0'
+    padding: "0",
   },
   iconButtons: {
     display: "block",
   },
+});
+
+window.addEventListener("dblclick", async () => {
+  await fetch("/api/test", {
+    method: "GET",
+  })
+    .then((res) => {
+      console.log(res.json());
+      
+      // return res.json();
+    })
+    // .then((res) => console.log(res));
 });
 
 export const Home: React.FC = (): React.ReactElement => {
