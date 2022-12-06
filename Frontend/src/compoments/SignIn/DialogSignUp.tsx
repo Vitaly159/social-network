@@ -1,3 +1,5 @@
+import React, { useRef } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -6,8 +8,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 import { Typography } from "@material-ui/core";
-import { Dispatch, SetStateAction } from "react";
-import React from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const useStyles = makeStyles({
   signInWrapper: {
@@ -62,6 +63,11 @@ const useStyles = makeStyles({
       backgroundColor: "rgba(0, 191, 255, 0.54)",
     },
   },
+  error: {
+    margin: "20px 20px 0",
+    padding: 10,
+    backgroundColor: "rgba(255,0,0,0.2)",
+  },
 });
 
 interface Props {
@@ -72,8 +78,48 @@ interface Props {
 export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
   const classes = useStyles();
 
+  const nameRef = useRef<HTMLInputElement>(null);
+  const surNameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordRef2 = useRef<HTMLInputElement>(null);
+
+  const [registerErrors, setRegisterErrors] = useState<string>("");
+  const [showErr, setShowErr] = useState<boolean>(false);
+
   const handleClose = (): void => {
     setOpenSignUp(false);
+    setShowErr(false)
+  };
+
+  const showErrOn = (): void => {
+    setShowErr(true);
+  };
+
+  const fetchRegistration = () => {
+    const userData = {
+      email: emailRef?.current?.value,
+      fullname: surNameRef?.current?.value,
+      username: nameRef?.current?.value,
+      password: passwordRef?.current?.value,
+      password2: passwordRef2?.current?.value,
+    };
+
+    fetch("/api/test", {
+      method: "POST",
+      body: JSON.stringify(userData),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then(
+        (res) =>
+          res.errors &&
+          (showErrOn(),
+          setRegisterErrors(res.errors.map((e: any) => e.msg).join(", ")))
+      )
+      .catch((err) => (showErrOn(), setRegisterErrors("Ошибка: " + err)));
   };
 
   return (
@@ -90,10 +136,42 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
           </Typography>
         </Box>
       </DialogTitle>
-      <TextField className={classes.input} label="Имя" variant="filled" />
-      <TextField className={classes.input} label="Email" variant="filled" />
-      <TextField className={classes.input} label="Пароль" variant="filled" />
-      <Button className={classes.buttonDialog}>Далее</Button>
+      <TextField
+        className={classes.input}
+        label="Имя"
+        variant="filled"
+        inputRef={nameRef}
+      />
+      <TextField
+        className={classes.input}
+        label="Фамилия"
+        variant="filled"
+        inputRef={surNameRef}
+      />
+      <TextField
+        className={classes.input}
+        label="Email"
+        variant="filled"
+        inputRef={emailRef}
+      />
+      <TextField
+        className={classes.input}
+        label="Пароль"
+        variant="filled"
+        inputRef={passwordRef}
+      />
+      <TextField
+        className={classes.input}
+        label="Пароль еще раз"
+        variant="filled"
+        inputRef={passwordRef2}
+      />
+
+      {showErr && <Box className={classes.error}>{registerErrors}</Box>}
+
+      <Button className={classes.buttonDialog} onClick={fetchRegistration}>
+        Далее
+      </Button>
     </Dialog>
   );
 };
