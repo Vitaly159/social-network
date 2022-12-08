@@ -6,11 +6,11 @@ const UserScheme = new Schema({
     required: true,
     type: String,
   },
-  fullname: {
+  firstname: {
     required: true,
     type: String,
   },
-  username: {
+  secondname: {
     unique: true,
     required: true,
     type: String,
@@ -20,16 +20,20 @@ const UserScheme = new Schema({
     required: true,
     type: String,
   },
-  confirmed: {
-    type: Boolean,
-    default: false,
-  },
-  confirmed_hash: {
+  password2: {
     required: true,
     type: String,
   },
-  about: String,
-  website: String,
+  // confirmed: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  // confirmed_hash: {
+  //   required: true,
+  //   type: String,
+  // },
+  // about: String,
+  // website: String,
 });
 
 export const UserModel = model("User", UserScheme);

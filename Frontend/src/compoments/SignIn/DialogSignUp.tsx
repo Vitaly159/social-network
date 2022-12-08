@@ -84,12 +84,13 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordRef2 = useRef<HTMLInputElement>(null);
 
-  const [registerErrors, setRegisterErrors] = useState<string>("");
+  const [registerErrors, setRegisterErrors] = useState<string[]>([]);
   const [showErr, setShowErr] = useState<boolean>(false);
+  console.log(registerErrors);
 
   const handleClose = (): void => {
     setOpenSignUp(false);
-    setShowErr(false)
+    setShowErr(false);
   };
 
   const showErrOn = (): void => {
@@ -99,14 +100,14 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
   const fetchRegistration = () => {
     const userData = {
       email: emailRef?.current?.value,
-      fullname: surNameRef?.current?.value,
-      username: nameRef?.current?.value,
+      secondname: surNameRef?.current?.value,
+      firstname: nameRef?.current?.value,
       password: passwordRef?.current?.value,
       password2: passwordRef2?.current?.value,
     };
 
     fetch("/api/test", {
-      method: "POST",
+      method: "post",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     })
@@ -115,11 +116,10 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
       })
       .then(
         (res) =>
-          res.errors &&
-          (showErrOn(),
-          setRegisterErrors(res.errors.map((e: any) => e.msg).join(", ")))
+          res.errors ?
+          (showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg))) : setShowErr(false)
       )
-      .catch((err) => (showErrOn(), setRegisterErrors("Ошибка: " + err)));
+      .catch((err) => (showErrOn(), setRegisterErrors(["Ошибка: " + err])));
   };
 
   return (
@@ -167,7 +167,13 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
         inputRef={passwordRef2}
       />
 
-      {showErr && <Box className={classes.error}>{registerErrors}</Box>}
+      {showErr && (
+        <Box className={classes.error}>
+          {registerErrors.map((err, index) => (
+            <p key={index}>{`- ${err}`}</p>
+          ))}
+        </Box>
+      )}
 
       <Button className={classes.buttonDialog} onClick={fetchRegistration}>
         Далее

@@ -2,19 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import { validationResult } from "express-validator";
 import { registerValidations } from "./validations/register";
+import { UserModel } from "./models/UserModel";
 import jwt from "jsonwebtoken";
-
-const Scheme = mongoose.Schema;
-
-const testSchema = new Scheme({
-  email: String,
-  fullname: String,
-  username: String,
-  password: String,
-  password2: String,
-});
-
-const test = mongoose.model("test", testSchema);
 
 const app = express();
 app.use(express.json());
@@ -27,7 +16,7 @@ const startServer = () => {
       .then((res) => console.log("connected"))
       .catch((err) => console.log(err));
     app.listen(PORT, function () {
-      test.find().then((res) => console.log(res));
+      UserModel.find().then((res) => console.log(res));
     });
   } catch (e) {
     console.log("error");
@@ -55,11 +44,11 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    test
+    UserModel
       .create({
         email: req.body.email,
-        fullname: req.body.fullname,
-        username: req.body.username,
+        firstname: req.body.firstname,
+        secondname: req.body.secondname,
         password: req.body.password,
         password2: req.body.password2,
       })
@@ -67,18 +56,17 @@ app.post(
   }
 );
 
-  //   const token = jwt.sign(
-  //    {
-  //      email: req.body.email,
-  //      fullname: req.body.fullname,
-  //      username: req.body.username,
-  //      password: req.body.password,
-  //    },
-  //    "12345"
-  //  );
+//   const token = jwt.sign(
+//    {
+//      email: req.body.email,
+//      fullname: req.body.fullname,
+//      username: req.body.username,
+//      password: req.body.password,
+//    },
+//    "12345"
+//  );
 
-  //  res.json({
-  //     success: 'true',
-  //     token,
-  //  });
-   
+//  res.json({
+//     success: 'true',
+//     token,
+//  });
