@@ -8,6 +8,6 @@ const app = (0, express_1.default)();
 app.get('/', function (req, res) {
     res.send('hell');
 });
-app.listen(3100, function () {
+app.listen(3200, function () {
     console.log('run');
 });

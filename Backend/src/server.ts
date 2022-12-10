@@ -14,7 +14,7 @@ const startServer = () => {
     mongoose
       .connect("mongodb://localhost:27017/test")
       .then((res) => console.log("connected"))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log('err'));
     app.listen(PORT, function () {
       UserModel.find().then((res) => console.log(res));
     });
@@ -51,6 +51,8 @@ app.post(
       password: req.body.password,
       password2: req.body.password2,
     }).then((user) => res.json(user));
+
+    startServer();
   }
 );
 
