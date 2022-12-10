@@ -106,18 +106,23 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
       password2: passwordRef2?.current?.value,
     };
 
-    fetch("/api/test", {
+    fetch("/api/auth/registration", {
       method: "post",
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     })
-      .then((res) => {
+      .then((res) => {        
         return res.json();
       })
-      .then(
-        (res) =>
-          res.errors ?
-          (showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg))) : setShowErr(false)
+      .then((res) =>
+      
+      
+        res.errors
+          ? ((showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg))
+          ), console.log())
+          
+          : (setShowErr(false), console.log(res))
+          
       )
       .catch((err) => (showErrOn(), setRegisterErrors(["Ошибка: " + err])));
   };

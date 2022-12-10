@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -74,6 +74,9 @@ interface Props {
 export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
   const classes = useStyles();
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -89,7 +92,28 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
     setOpenSignIn(false);
   };
 
-  // const clickEnter = email === "hi" && password === "123" ? "/home" : "/";
+  const fetchLogin = () => {
+    const userData = {
+      email: emailRef?.current?.value,
+      password: passwordRef?.current?.value,
+    };
+
+    fetch("/api/auth/login", {
+      method: "post",
+      body: JSON.stringify(userData),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) =>
+      
+        res.errors
+          ? console.log(res)
+          : (console.log(res), localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)))
+      )
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Dialog
@@ -111,6 +135,7 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
         variant="filled"
         value={email}
         onChange={changeEmail}
+        inputRef={emailRef}
       />
       <TextField
         className={classes.input}
@@ -118,8 +143,14 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
         variant="filled"
         value={password}
         onChange={changePassword}
+        inputRef={passwordRef}
       />
-      <Button component={Link} to={"/home"} className={classes.buttonDialog}>
+      <Button
+        // component={Link}
+        // to={"/home"}
+        className={classes.buttonDialog}
+        onClick={fetchLogin}
+      >
         Войти
       </Button>
     </Dialog>
