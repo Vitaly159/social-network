@@ -14,23 +14,24 @@ const UserScheme = new Schema({
     required: true,
     type: String,
   },
-  location: String,
+  // location: String,
   password: {
+    select: false,
     required: true,
     type: String,
   },
   password2: {
-    required: true,
+    select: false,
     type: String,
   },
   // confirmed: {
   //   type: Boolean,
   //   default: false,
   // },
-  // confirmed_hash: {
-  //   required: true,
-  //   type: String,
-  // },
+  confirmed_hash: {
+    required: true,
+    type: String,
+  },
   // about: String,
   // website: String,
 });
