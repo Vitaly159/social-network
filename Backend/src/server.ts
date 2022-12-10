@@ -44,17 +44,24 @@ app.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    UserModel
-      .create({
-        email: req.body.email,
-        firstname: req.body.firstname,
-        secondname: req.body.secondname,
-        password: req.body.password,
-        password2: req.body.password2,
-      })
-      .then((user) => res.json(user));
+    UserModel.create({
+      email: req.body.email,
+      firstname: req.body.firstname,
+      secondname: req.body.secondname,
+      password: req.body.password,
+      password2: req.body.password2,
+    }).then((user) => res.json(user));
   }
 );
+
+// put запрос------------------------------------
+// app.put("/api/test/:_id", async (req: express.Request, res) => {
+//   UserModel.findByIdAndUpdate({ _id: req.params.id }, req.body).then((user) => {
+//     UserModel.findOne({ _id: req.params.id }).then((user) => {
+//       res.send(user);
+//     });
+//   });
+// });
 
 //   const token = jwt.sign(
 //    {
