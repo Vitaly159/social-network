@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -111,18 +111,13 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
       body: JSON.stringify(userData),
       headers: { "Content-Type": "application/json" },
     })
-      .then((res) => {        
+      .then((res) => {
         return res.json();
       })
       .then((res) =>
-      
-      
         res.errors
-          ? ((showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg))
-          ), console.log())
-          
-          : (setShowErr(false), console.log(res))
-          
+          ? (showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg)))
+          : setShowErr(false)
       )
       .catch((err) => (showErrOn(), setRegisterErrors(["Ошибка: " + err])));
   };

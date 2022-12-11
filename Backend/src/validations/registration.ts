@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const registerValidations = [
+export const registrationValidations = [
   body("email", "Введите E-Mail").isEmail().withMessage("Недопустимый E-Mail"),
   body("firstname", "Введите имя")
     .isString()

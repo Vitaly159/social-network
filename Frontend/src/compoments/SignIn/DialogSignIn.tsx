@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -107,7 +106,6 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
         return res.json();
       })
       .then((res) =>
-      
         res.errors
           ? console.log(res)
           : (console.log(res), localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)))
