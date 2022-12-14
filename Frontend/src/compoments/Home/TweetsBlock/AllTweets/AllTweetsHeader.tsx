@@ -146,10 +146,10 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     if (user[0]) {
       if (textInput.trim().length > 0) {
         const newTweet = {
-          id: uuid(),
+          // id: uuid(),
           user: {
-            firstName: user[0].user.firstName,
-            secondName: user[0].user.secondName,
+            firstname: user[0].user.firstname,
+            secondname: user[0].user.secondname,
             avatar: user[0].user.avatar,
           },
           text: textInput,
@@ -167,12 +167,14 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     }
   };
 
-  async function postReq(value: any) {
-    await axios
-      .post(
-        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
-        value
-      )
+  // const createTwee
+
+  function postReq(value: any) {
+    fetch("/api/create-tweet", {
+      method: 'POST',
+      body: JSON.stringify(value),
+      headers: { "Content-Type": "application/json" },
+    })
       .then((res) => {
         dispatch(onAddTweet(value));
         setIsAddingTweet(false);

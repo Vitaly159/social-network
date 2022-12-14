@@ -16,18 +16,6 @@ const useStyles = makeStyles({
   },
 });
 
-// window.addEventListener("dblclick", async () => {
-//   await fetch("/api/test", {
-//     method: "GET",
-//   })
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((res) => console.log(res));
-// });
-
-
-
 export const Home: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 

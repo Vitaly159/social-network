@@ -29,8 +29,8 @@ const useStyles = makeStyles({
 });
 
 type UsersTweet = {
-  firstName: string;
-  secondName: string;
+  firstname: string;
+  secondname: string;
   avatar: string;
 };
 
@@ -55,9 +55,9 @@ export const TweetsBlock: React.FC = (): React.ReactElement => {
   useEffect(() => {
     const postReq = async () => {
       await axios
-        .get("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1")
-        .then((res) => {
-          dispatch(getTweets(res.data));
+        .get("api/tweets")
+        .then((res) => {      
+          dispatch(getTweets(res.data.results));
           setLoadingTweetsError(false);
           setIsLoadingTweets(false);
         })

@@ -195,10 +195,10 @@ export const AddTweet = ({
     if (inputRef.current.value.trim().length > 0) {
       if (user[0]) {
         const newTweet = {
-          id: uuid(),
+          // id: uuid(),
           user: {
-            firstName: user[0].user.firstName,
-            secondName: user[0].user.secondName,
+            firstname: user[0].user.firstname,
+            secondname: user[0].user.secondname,
             avatar: user[0].user.avatar,
           },
           text: inputRef.current.value,

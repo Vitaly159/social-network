@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UsersTweet = {
-  firstName: string;
-  secondName: string;
+  firstname: string;
+  secondname: string;
   avatar: string;
 };
 

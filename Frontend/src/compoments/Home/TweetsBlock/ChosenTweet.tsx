@@ -67,8 +67,8 @@ const useStyles = makeStyles({
 });
 
 type UsersTweet = {
-  firstName: string;
-  secondName: string;
+  firstname: string;
+  secondname: string;
   avatar: string;
 };
 
@@ -113,7 +113,7 @@ export const ChosenTweet = ({
               <Box className={classes.names}>
                 <Typography
                   className={classes.myName}
-                >{`${showChosenTweet[0].user.firstName} ${showChosenTweet[0].user.secondName}`}</Typography>
+                >{`${showChosenTweet[0].user.firstname} ${showChosenTweet[0].user.secondname}`}</Typography>
                 <Typography className={classes.friendsName}>
                   @userName
                 </Typography>

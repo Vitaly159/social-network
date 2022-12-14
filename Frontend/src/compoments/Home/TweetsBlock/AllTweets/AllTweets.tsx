@@ -55,19 +55,19 @@ const useStyles = makeStyles({
     },
   },
   progressBar: {
-    textAlign: 'center',
-    padding: 20
+    textAlign: "center",
+    padding: 20,
   },
   publishedTiem: {
     fontSize: 14,
     opacity: 0.5,
-    padding: "10px 5px"
-  }
+    padding: "10px 5px",
+  },
 });
 
 type UsersTweet = {
-  firstName: string;
-  secondName: string;
+  firstname: string;
+  secondname: string;
   avatar: string;
 };
 
@@ -75,7 +75,7 @@ type TweetType = {
   id: string;
   user: UsersTweet;
   text: string;
-  time: string
+  time: string;
 };
 
 interface Props {
@@ -84,7 +84,8 @@ interface Props {
 }
 
 export const AllTweets = ({
-  setShowChosenTweet,isLoadingTweets
+  setShowChosenTweet,
+  isLoadingTweets,
 }: Props): React.ReactElement => {
   const classes = useStyles();
   const tweets = useAppSelector((state) => state.tweets.tweets);
@@ -98,15 +99,19 @@ export const AllTweets = ({
     <Paper>
       <AllTweetsHeader />
 
-      {!isLoadingTweets ? (
-        tweets
-          .slice()
-          .reverse()
-          .map((tweet, index) => (
+      {isLoadingTweets && (
+        <Box className={classes.progressBar}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {tweets &&
+        tweets.slice().reverse().map((tweet, index) => (
             <Box
               key={index}
               className={classes.post}
-              onClick={() => {clickOnTweet(tweet["id"]);
+              onClick={() => {
+                clickOnTweet(tweet["id"]);
               }}
             >
               <Box>
@@ -121,7 +126,7 @@ export const AllTweets = ({
                   <Box className={classes.names}>
                     <Typography
                       className={classes.myName}
-                    >{`${tweet.user.firstName} ${tweet.user.secondName}`}</Typography>
+                    >{`${tweet.user.firstname} ${tweet.user.secondname}`}</Typography>
                     <Typography className={classes.friendsName}>
                       @userName
                     </Typography>
@@ -150,12 +155,7 @@ export const AllTweets = ({
                 </Box>
               </Box>
             </Box>
-          ))
-      ) : (
-        <Box className={classes.progressBar}>
-          <CircularProgress />
-        </Box>
-      )}
+          ))}
     </Paper>
   );
 };
