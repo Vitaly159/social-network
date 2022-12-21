@@ -170,6 +170,8 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   // const createTwee
 
   function postReq(value: any) {
+    console.log(value);
+    
     fetch("/api/create-tweet", {
       method: 'POST',
       body: JSON.stringify(value),

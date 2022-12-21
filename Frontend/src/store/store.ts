@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import Tweets from '../reducers/Tweets'
+import Tweets from '../reducers/Tweets'//редьюсер: все, что касается действий с твитами
 
 export const store = configureStore({
   reducer: {

@@ -22,9 +22,11 @@ const useStyles = makeStyles({
     "&:hover": {
       backgroundColor: "rgb(250,250,250)",
     },
+    zIndex: 1,
   },
   names: {
     display: "flex",
+    justifyContent: "space-between",
     padding: 6,
   },
   myName: {
@@ -91,8 +93,21 @@ export const AllTweets = ({
   const tweets = useAppSelector((state) => state.tweets.tweets);
 
   const clickOnTweet = (value: any): void => {
-    const tweet = [tweets.find((tweet) => tweet["id"] === value)];
+    const tweet = [tweets.find((tweet) => tweet["_id"] === value)];
     setShowChosenTweet(tweet);
+        
+  };
+
+  const deleteTweet = (e, id): void => {
+    e.stopPropagation();
+console.log(id);
+
+    fetch(`/api/delete-tweet/${id}`, {
+      method:'delete',
+      body: JSON.stringify({id: id}),
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json()).then((res)=> res)
+    
   };
 
   return (
@@ -106,12 +121,15 @@ export const AllTweets = ({
       )}
 
       {tweets &&
-        tweets.slice().reverse().map((tweet, index) => (
+        tweets
+          .slice()
+          .reverse()
+          .map((tweet, index) => (
             <Box
               key={index}
               className={classes.post}
               onClick={() => {
-                clickOnTweet(tweet["id"]);
+                clickOnTweet(tweet["_id"]);
               }}
             >
               <Box>
@@ -124,12 +142,22 @@ export const AllTweets = ({
               <Box style={{ width: "100%" }}>
                 <Box>
                   <Box className={classes.names}>
-                    <Typography
-                      className={classes.myName}
-                    >{`${tweet.user.firstname} ${tweet.user.secondname}`}</Typography>
-                    <Typography className={classes.friendsName}>
-                      @userName
-                    </Typography>
+                    <Box>
+                      <Typography
+                        className={classes.myName}
+                      >{`${tweet.user.firstname} ${tweet.user.secondname}`}</Typography>
+                      <Typography className={classes.friendsName}>
+                        @userName
+                      </Typography>
+                    </Box>
+                    <Box
+                      style={{ zIndex: 100 }}
+                      onClick={(e) => {
+                        deleteTweet(e, tweet['_id'])
+                      }}
+                    >
+                      X
+                    </Box>
                   </Box>
                   <Box className={classes.postsText}>{tweet.text}</Box>
                   <Box className={classes.publishedTiem}>{tweet.time}</Box>

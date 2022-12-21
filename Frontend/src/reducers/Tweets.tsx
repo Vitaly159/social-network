@@ -40,7 +40,7 @@ export const Tweets = createSlice({
     getUser(state, action: PayloadAction<User[]>) {
       state.user = action.payload;
     },
-    onAddTweet(state, action) {
+    onAddTweet(state, action: PayloadAction<TweetType>) {
       state.tweets.push(action.payload);
     },
     setShowError(state, action: PayloadAction<boolean>) {

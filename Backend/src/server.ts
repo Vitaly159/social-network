@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 // import jwt from "jsonwebtoken";
 import { apiReg, validReg, postReg } from "./api/registrationApi";
 import { apiLogin, validLogin, postLogin } from "./api/loginApi";
-import { apiAddTweet, postAddTweet } from "./api/addTweetApi";
-import { apiGetTweets, getTweets } from "./api/addTweetApi";
+import { apiAddTweet, postAddTweet } from "./api/TweetsApi";
+import { apiGetTweets, getTweets } from "./api/TweetsApi";
+import { apiDeleteTweet, deleteTweet } from "./api/TweetsApi";
 
 const app = express();
 app.use(express.json());
@@ -29,7 +30,8 @@ const startServer = () => {
 
 startServer();
 
-app.post(apiReg, postReg);//регистрация
+app.post(apiReg, validReg, postReg);//регистрация
 app.post(apiLogin, validLogin, postLogin);//авторизация
 app.post(apiAddTweet, postAddTweet);//добавление твита
-app.get(apiGetTweets, getTweets)
+app.get(apiGetTweets, getTweets)//получение твиттов
+app.delete(apiDeleteTweet, deleteTweet)//удаление твитта

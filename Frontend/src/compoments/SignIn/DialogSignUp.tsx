@@ -1,15 +1,12 @@
-import { useRef } from "react";
-
+import { useRef, Dispatch, SetStateAction, useState } from "react";
+//material ui
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import { Box, Button, Typography } from "@material-ui/core";
+import { Dialog, DialogTitle } from "@material-ui/core"; //модульное окно
+//иконки material ui
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
-import { Typography } from "@material-ui/core";
-import { Dispatch, SetStateAction, useState } from "react";
-
+//стили
 const useStyles = makeStyles({
   signInWrapper: {
     "& .MuiDialog-paperWidthSm": {
@@ -78,26 +75,27 @@ interface Props {
 export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
   const classes = useStyles();
 
-  const nameRef = useRef<HTMLInputElement>(null);
-  const surNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const passwordRef2 = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);//поле имя
+  const surNameRef = useRef<HTMLInputElement>(null);//поле фамилия
+  const emailRef = useRef<HTMLInputElement>(null);//поле почты
+  const passwordRef = useRef<HTMLInputElement>(null);//поле пароля
+  const passwordRef2 = useRef<HTMLInputElement>(null);//поле подтверждения пароля
 
-  const [registerErrors, setRegisterErrors] = useState<string[]>([]);
-  const [showErr, setShowErr] = useState<boolean>(false);
+  const [registerErrors, setRegisterErrors] = useState<string[]>([]);//ошибки регистрации
+  const [showErr, setShowErr] = useState<boolean>(false);//показать/скрыть ошибки
   console.log(registerErrors);
 
   const handleClose = (): void => {
-    setOpenSignUp(false);
-    setShowErr(false);
+    setOpenSignUp(false);//закрыть окно регистрации
+    setShowErr(false);//скрыть ошибки при регистрации
   };
 
   const showErrOn = (): void => {
-    setShowErr(true);
+    setShowErr(true);//показать ошибку регистрации
   };
 
   const fetchRegistration = () => {
+    //регистрация: отправка данных о юзере
     const userData = {
       email: emailRef?.current?.value,
       secondname: surNameRef?.current?.value,

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
+import { Box, Button, Typography } from "@material-ui/core";
+//иконки material ui
 import TwitterIcon from "@material-ui/icons/Twitter";
 import SearchIcon from "@material-ui/icons/Search";
 import PeopleIcon from "@material-ui/icons/People";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
-import { Typography } from "@material-ui/core";
-
+//компоненты
 import { DialogSignIn } from "./DialogSignIn"; //окно входа
 import { DialogSignUp } from "./DialogSignUp"; //окно регистрации
 
@@ -91,15 +90,13 @@ const useStyles = makeStyles({
 export const SignIn: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
-  //окно входа
-  const [openSignIn, setOpenSignIn] = useState<boolean>(false);
+  const [openSignIn, setOpenSignIn] = useState<boolean>(false); //окно входа
 
   const clickOpenSignIn = (): void => {
     setOpenSignIn(true);
   };
 
-  //окно регистрации
-  const [openSignUp, setOpenSignUp] = useState<boolean>(false);
+  const [openSignUp, setOpenSignUp] = useState<boolean>(false); //окно регистрации
 
   const clickOpenSignUp = (): void => {
     setOpenSignUp(true);

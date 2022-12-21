@@ -147,12 +147,12 @@ export const AddTweet = ({
   const date = new Date();
 
   const options: Intl.DateTimeFormatOptions = {
-    hour: 'numeric',
-    minute: 'numeric',
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-  }
+    hour: "numeric",
+    minute: "numeric",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  };
 
   const tweetTime = date.toLocaleString("ru", options);
 
@@ -172,12 +172,12 @@ export const AddTweet = ({
     setOpenAddTweet(false);
   };
 
-  async function postReq(value: any) {
-    await axios
-      .post(
-        "https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/1",
-        value
-      )
+  function postReq(value: any) {
+    fetch("/api/create-tweet", {
+      method: "POST",
+      body: JSON.stringify(value),
+      headers: { "Content-Type": "application/json" },
+    })
       .then((res) => {
         dispatch(onAddTweet(value));
         dispatch(setShowError(false));
@@ -202,7 +202,7 @@ export const AddTweet = ({
             avatar: user[0].user.avatar,
           },
           text: inputRef.current.value,
-          time: tweetTime
+          time: tweetTime,
         };
 
         handleClose();
