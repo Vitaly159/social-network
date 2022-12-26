@@ -69,7 +69,7 @@ const useStyles = makeStyles({
 type UsersTweet = {
   firstname: string;
   secondname: string;
-  avatar: string;
+  //avatar: string;
 };
 
 type TweetType = {
@@ -104,7 +104,7 @@ export const ChosenTweet = ({
           <Box>
             <Avatar
               alt="Remy Sharp"
-              src={showChosenTweet[0] && showChosenTweet[0].user.avatar}
+              src={""}
             />
           </Box>
 

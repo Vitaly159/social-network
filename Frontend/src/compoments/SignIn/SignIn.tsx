@@ -87,7 +87,11 @@ const useStyles = makeStyles({
   },
 });
 
-export const SignIn: React.FC = (): React.ReactElement => {
+type Props = {
+  checkAuth: () => void;
+};
+
+export const SignIn: React.FC<Props> = ({ checkAuth }): React.ReactElement => {
   const classes = useStyles();
 
   const [openSignIn, setOpenSignIn] = useState<boolean>(false); //окно входа
@@ -147,7 +151,11 @@ export const SignIn: React.FC = (): React.ReactElement => {
       </Box>
 
       <DialogSignIn openSignIn={openSignIn} setOpenSignIn={setOpenSignIn} />
-      <DialogSignUp openSignUp={openSignUp} setOpenSignUp={setOpenSignUp} />
+      <DialogSignUp
+        openSignUp={openSignUp}
+        setOpenSignUp={setOpenSignUp}
+        checkAuth={checkAuth}
+      />
     </Box>
   );
 };

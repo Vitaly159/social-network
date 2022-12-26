@@ -9,6 +9,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 import { Typography } from "@material-ui/core";
 import { Dispatch, SetStateAction } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 const useStyles = makeStyles({
   signInWrapper: {
@@ -70,8 +73,20 @@ interface Props {
   setOpenSignIn: Dispatch<SetStateAction<boolean>>;
 }
 
+// const routing = (path: string, isAuth: boolean) => {
+//   if (isAuth) {
+//     return path;
+//   } else {
+//     return "/";
+//   }
+// };
+
 export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
   const classes = useStyles();
+
+  let navigate = useNavigate();
+
+  const isAuth = useAppSelector((state) => state.tweets.isAuth);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -105,11 +120,15 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
       .then((res) => {
         return res.json();
       })
-      .then((res) =>
+      .then((res) => {
         res.errors
           ? console.log(res)
-          : (console.log(res), localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)))
-      )
+          : localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash));
+            navigate("/home");
+            // window.location.reload()
+            console.log(res)
+      })
+      
       .catch((err) => console.log(err));
   };
 

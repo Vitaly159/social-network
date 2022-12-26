@@ -31,7 +31,7 @@ const useStyles = makeStyles({
 type UsersTweet = {
   firstname: string;
   secondname: string;
-  avatar: string;
+  //avatar: string;
 };
 
 type TweetType = {

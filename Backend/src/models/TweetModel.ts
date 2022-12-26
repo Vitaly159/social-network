@@ -5,7 +5,7 @@ type UserType = {
   user: {
     firstname: string,
     secondname: string,
-    avatar: string
+    //avatar: string
   }
 };
 

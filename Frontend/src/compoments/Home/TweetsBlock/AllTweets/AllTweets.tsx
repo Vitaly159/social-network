@@ -70,7 +70,7 @@ const useStyles = makeStyles({
 type UsersTweet = {
   firstname: string;
   secondname: string;
-  avatar: string;
+  //avatar: string;
 };
 
 type TweetType = {
@@ -95,19 +95,19 @@ export const AllTweets = ({
   const clickOnTweet = (value: any): void => {
     const tweet = [tweets.find((tweet) => tweet["_id"] === value)];
     setShowChosenTweet(tweet);
-        
   };
 
   const deleteTweet = (e, id): void => {
     e.stopPropagation();
-console.log(id);
+    console.log(id);
 
     fetch(`/api/delete-tweet/${id}`, {
-      method:'delete',
-      body: JSON.stringify({id: id}),
+      method: "delete",
+      body: JSON.stringify({ id: id }),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json()).then((res)=> res)
-    
+    })
+      .then((res) => res.json())
+      .then((res) => res);
   };
 
   return (
@@ -133,10 +133,7 @@ console.log(id);
               }}
             >
               <Box>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={tweet.user.avatar && tweet.user.avatar}
-                />
+                <Avatar alt="Remy Sharp" src={""} />
               </Box>
 
               <Box style={{ width: "100%" }}>
@@ -153,7 +150,7 @@ console.log(id);
                     <Box
                       style={{ zIndex: 100 }}
                       onClick={(e) => {
-                        deleteTweet(e, tweet['_id'])
+                        deleteTweet(e, tweet["_id"]);
                       }}
                     >
                       X

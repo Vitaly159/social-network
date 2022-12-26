@@ -192,14 +192,17 @@ export const AddTweet = ({
   }
 
   const clickAddTweet = () => {
+    const login = localStorage.getItem('twHash')
+    console.log(login);
+    
     if (inputRef.current.value.trim().length > 0) {
       if (user[0]) {
         const newTweet = {
           // id: uuid(),
           user: {
-            firstname: user[0].user.firstname,
-            secondname: user[0].user.secondname,
-            avatar: user[0].user.avatar,
+            firstname: user[0].firstname,
+            secondname: user[0].secondname,
+            //avatar: user[0].avatar,
           },
           text: inputRef.current.value,
           time: tweetTime,
@@ -236,7 +239,7 @@ export const AddTweet = ({
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
           <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="me" src={user[0] && user[0].user.avatar} />
+            <Avatar alt="me" src={""} />
           </Box>
           <Box className={classes.form}>
             <CssTextField

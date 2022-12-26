@@ -36,6 +36,14 @@ export const postReg = (req: express.Request, res: express.Response) => {
         password: req.body.password,
         confirmed_hash: token,
       }).then((user) => res.json(user));
+    } else {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: "Выберете другой email для регистрации",
+          },
+        ],
+      });
     }
   });
 };

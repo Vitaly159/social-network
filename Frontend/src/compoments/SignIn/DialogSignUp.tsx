@@ -6,6 +6,8 @@ import { Dialog, DialogTitle } from "@material-ui/core"; //модульное о
 //иконки material ui
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
+
+import { useNavigate } from "react-router-dom";
 //стили
 const useStyles = makeStyles({
   signInWrapper: {
@@ -70,28 +72,34 @@ const useStyles = makeStyles({
 interface Props {
   openSignUp: boolean;
   setOpenSignUp: Dispatch<SetStateAction<boolean>>;
+  checkAuth: () => void;
 }
 
-export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
+export const DialogSignUp = ({
+  openSignUp,
+  setOpenSignUp,
+  checkAuth,
+}: Props) => {
   const classes = useStyles();
 
-  const nameRef = useRef<HTMLInputElement>(null);//поле имя
-  const surNameRef = useRef<HTMLInputElement>(null);//поле фамилия
-  const emailRef = useRef<HTMLInputElement>(null);//поле почты
-  const passwordRef = useRef<HTMLInputElement>(null);//поле пароля
-  const passwordRef2 = useRef<HTMLInputElement>(null);//поле подтверждения пароля
+  let navigate = useNavigate();
 
-  const [registerErrors, setRegisterErrors] = useState<string[]>([]);//ошибки регистрации
-  const [showErr, setShowErr] = useState<boolean>(false);//показать/скрыть ошибки
-  console.log(registerErrors);
+  const nameRef = useRef<HTMLInputElement>(null); //поле имя
+  const surNameRef = useRef<HTMLInputElement>(null); //поле фамилия
+  const emailRef = useRef<HTMLInputElement>(null); //поле почты
+  const passwordRef = useRef<HTMLInputElement>(null); //поле пароля
+  const passwordRef2 = useRef<HTMLInputElement>(null); //поле подтверждения пароля
+
+  const [registerErrors, setRegisterErrors] = useState<string[]>([]); //ошибки регистрации
+  const [showErr, setShowErr] = useState<boolean>(false); //показать/скрыть ошибки
 
   const handleClose = (): void => {
-    setOpenSignUp(false);//закрыть окно регистрации
-    setShowErr(false);//скрыть ошибки при регистрации
+    setOpenSignUp(false); //закрыть окно регистрации
+    setShowErr(false); //скрыть ошибки при регистрации
   };
 
   const showErrOn = (): void => {
-    setShowErr(true);//показать ошибку регистрации
+    setShowErr(true); //показать ошибку регистрации
   };
 
   const fetchRegistration = () => {
@@ -110,12 +118,16 @@ export const DialogSignUp = ({ openSignUp, setOpenSignUp }: Props) => {
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
+        res.ok && setShowErr(false);
         return res.json();
       })
       .then((res) =>
         res.errors
           ? (showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg)))
-          : setShowErr(false)
+          : (localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)),
+            setShowErr(false),
+            checkAuth(),
+            window.location.reload())
       )
       .catch((err) => (showErrOn(), setRegisterErrors(["Ошибка: " + err])));
   };

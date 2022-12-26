@@ -118,20 +118,23 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const tweetTime = date.toLocaleString("ru", options);
 
   useEffect(() => {
-    const fetchGetTweets = () => {
-      fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/user/", {
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          dispatch(getUser(json));
-        });
-    };
-    fetchGetTweets();
+    // const fetchGetTweets = () => {
+    //   fetch("https://636f5720f2ed5cb047db0d0f.mockapi.io/api/v1/tweets/user/", {
+    //     method: "GET",
+    //   })
+    //     .then((res) => {
+    //       return res.json();
+    //     })
+    //     .then((json) => {
+    //       dispatch(getUser(json));
+    //     });
+    // };
+    // fetchGetTweets();
   }, [dispatch]);
 
+  console.log(user);
+  
+  
   const [textBar, setTextBar] = useState<number>(280);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -148,9 +151,9 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
         const newTweet = {
           // id: uuid(),
           user: {
-            firstname: user[0].user.firstname,
-            secondname: user[0].user.secondname,
-            avatar: user[0].user.avatar,
+            firstname: user[0].firstname,
+            secondname: user[0].secondname,
+            //avatar: user[0].user.avatar,
           },
           text: textInput,
           time: tweetTime
@@ -200,7 +203,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
           <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="Remy Sharp" src={user[0] ? user[0].user.avatar : ""} />
+            <Avatar alt="Remy Sharp" src={""} />
           </Box>
           <Box className={classes.form}>
             <CssTextField

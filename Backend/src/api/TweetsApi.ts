@@ -34,9 +34,7 @@ export const getTweets = async (
   res: express.Response
 ) => {
   res.send({
-    results: await TweetModel.find().then((res) => {
-      return res;
-    }),
+    results: await TweetModel.find().then((res) => res),
   });
 };
 
@@ -49,6 +47,7 @@ export const deleteTweet = (req: express.Request, res: express.Response) => {
   //     return res.status(400).json({ errors: errors.array() });
   //   }
 
-   TweetModel.findOneAndDelete({_id: req.body.id})
-   .then((user) => res.json(user));
+  TweetModel.findOneAndDelete({ _id: req.body.id }).then((user) =>
+    res.json(user)
+  );
 };
