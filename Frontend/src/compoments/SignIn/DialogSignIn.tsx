@@ -12,6 +12,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { setRegisterErrors } from "../../reducers/Tweets";
 
 const useStyles = makeStyles({
   signInWrapper: {
@@ -66,6 +67,11 @@ const useStyles = makeStyles({
       backgroundColor: "rgba(0, 191, 255, 0.54)",
     },
   },
+  error: {
+    margin: "20px 20px 0",
+    padding: 10,
+    backgroundColor: "rgba(255,0,0,0.2)",
+  },
 });
 
 interface Props {
@@ -85,8 +91,10 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
   const classes = useStyles();
 
   let navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const isAuth = useAppSelector((state) => state.tweets.isAuth);
+  const registerErrors = useAppSelector((state) => state.tweets.registerErrors); //ошибки авторизации
+  const [showErr, setShowErr] = useState<boolean>(false); //показать/скрыть ошибки
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -106,6 +114,10 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
     setOpenSignIn(false);
   };
 
+  const showErrOn = (): void => {
+    setShowErr(true); //показать ошибку регистрации
+  };
+
   const fetchLogin = () => {
     const userData = {
       email: emailRef?.current?.value,
@@ -120,16 +132,21 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
       .then((res) => {
         return res.json();
       })
-      .then((res) => {
+      .then((res) =>
         res.errors
-          ? console.log(res)
-          : localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash));
-            navigate("/home");
-            // window.location.reload()
-            console.log(res)
-      })
-      
-      .catch((err) => console.log(err));
+          ? (showErrOn(),
+            dispatch(setRegisterErrors(res.errors.map((e: any) => e.msg))))
+          : (localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)),
+            setShowErr(false),
+            window.location.reload()
+            )
+      )
+      // .then(() => {
+      //   window.location.reload();
+      // })
+      .catch(
+        (err) => (showErrOn(), dispatch(setRegisterErrors(["Ошибка: " + err])))
+      );
   };
 
   return (
@@ -162,6 +179,15 @@ export const DialogSignIn = ({ openSignIn, setOpenSignIn }: Props) => {
         onChange={changePassword}
         inputRef={passwordRef}
       />
+
+      {showErr && (
+        <Box className={classes.error}>
+          {registerErrors.map((err, index) => (
+            <p key={index}>{`- ${err}`}</p>
+          ))}
+        </Box>
+      )}
+
       <Button
         // component={Link}
         // to={"/home"}

@@ -27,6 +27,7 @@ type States = {
   tweets: TweetType[];
   showError: boolean;
   isAuth: boolean;
+  registerErrors: string[];
 };
 
 const initialState: States = {
@@ -34,6 +35,7 @@ const initialState: States = {
   tweets: [],
   showError: false,
   isAuth: false,
+  registerErrors: [],
 };
 
 export const Tweets = createSlice({
@@ -55,9 +57,18 @@ export const Tweets = createSlice({
     setIsAuth(state, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
     },
+    setRegisterErrors(state, action: PayloadAction<string[]>) {
+      state.registerErrors = action.payload;
+    },
   },
 });
 
-export const { getTweets, getUser, onAddTweet, setShowError, setIsAuth } =
-  Tweets.actions;
+export const {
+  getTweets,
+  getUser,
+  onAddTweet,
+  setShowError,
+  setIsAuth,
+  setRegisterErrors
+} = Tweets.actions;
 export default Tweets.reducer;

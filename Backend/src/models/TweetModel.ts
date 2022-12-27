@@ -3,23 +3,23 @@ import { object } from "prop-types";
 
 type UserType = {
   user: {
-    firstname: string,
-    secondname: string,
+    firstname: string;
+    secondname: string;
     //avatar: string
-  }
+  };
 };
 
 type TweetModelType = {
-  user: UserType
+  user: UserType;
   text: string;
-  time: string
+  time: string;
 };
 
-type TweetModelAndDocumentType = TweetModelType & Document;
+//type TweetModelAndDocumentType = TweetModelType & Document;
 
-const TweetScheme = new Schema<TweetModelAndDocumentType>({
+const TweetScheme = new Schema({
   text: {
-    // required: true,
+    //required: true,
   },
   user: {
     //required: true,
@@ -27,11 +27,8 @@ const TweetScheme = new Schema<TweetModelAndDocumentType>({
     // type: object,
   },
   time: {
-    //required: true,
-  }
+    //required: true
+  },
 });
 
-export const TweetModel = model<TweetModelAndDocumentType>(
-  "Tweet",
-  TweetScheme
-);
+export const TweetModel = model("Tweet", TweetScheme);

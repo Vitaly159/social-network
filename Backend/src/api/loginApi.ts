@@ -19,5 +19,15 @@ export const postLogin = (req: express.Request, res: express.Response) => {
   UserModel.findOne({
     email: req.body.email,
     password: req.body.password,
-  }).then((user) => res.json(user));
+  }).then((user) =>
+    user
+      ? res.json(user)
+      : res.status(400).json({
+          errors: [
+            {
+              msg: "Неверный email или пароль",
+            },
+          ],
+        })
+  );
 };

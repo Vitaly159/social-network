@@ -7,6 +7,8 @@ import { Dialog, DialogTitle } from "@material-ui/core"; //модульное о
 import CloseIcon from "@material-ui/icons/Close";
 import TextField from "@material-ui/core/TextField";
 
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { setRegisterErrors } from "../../reducers/Tweets";
 import { useNavigate } from "react-router-dom";
 //стили
 const useStyles = makeStyles({
@@ -81,8 +83,9 @@ export const DialogSignUp = ({
   checkAuth,
 }: Props) => {
   const classes = useStyles();
-
+  const dispatch = useAppDispatch();
   let navigate = useNavigate();
+  const registerErrors = useAppSelector((state) => state.tweets.registerErrors); //ошибки регистрации
 
   const nameRef = useRef<HTMLInputElement>(null); //поле имя
   const surNameRef = useRef<HTMLInputElement>(null); //поле фамилия
@@ -90,7 +93,6 @@ export const DialogSignUp = ({
   const passwordRef = useRef<HTMLInputElement>(null); //поле пароля
   const passwordRef2 = useRef<HTMLInputElement>(null); //поле подтверждения пароля
 
-  const [registerErrors, setRegisterErrors] = useState<string[]>([]); //ошибки регистрации
   const [showErr, setShowErr] = useState<boolean>(false); //показать/скрыть ошибки
 
   const handleClose = (): void => {
@@ -123,13 +125,16 @@ export const DialogSignUp = ({
       })
       .then((res) =>
         res.errors
-          ? (showErrOn(), setRegisterErrors(res.errors.map((e: any) => e.msg)))
+          ? (showErrOn(),
+            dispatch(setRegisterErrors(res.errors.map((e: any) => e.msg))))
           : (localStorage.setItem("twHash", JSON.stringify(res.confirmed_hash)),
             setShowErr(false),
             checkAuth(),
             window.location.reload())
       )
-      .catch((err) => (showErrOn(), setRegisterErrors(["Ошибка: " + err])));
+      .catch(
+        (err) => (showErrOn(), dispatch(setRegisterErrors(["Ошибка: " + err])))
+      );
   };
 
   return (

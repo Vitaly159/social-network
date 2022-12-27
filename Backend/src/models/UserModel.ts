@@ -23,10 +23,6 @@ const UserScheme = new Schema(
     password2: {
       type: String,
     },
-    // confirmed: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     confirmed_hash: {
       required: true,
       type: String,

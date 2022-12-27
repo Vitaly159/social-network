@@ -42,10 +42,10 @@ export const getTweets = async (
 export const apiDeleteTweet = "/api/delete-tweet/:text";
 
 export const deleteTweet = (req: express.Request, res: express.Response) => {
-  //   const errors = validationResult(req);
-  //   if (!errors.isEmpty()) {
-  //     return res.status(400).json({ errors: errors.array() });
-  //   }
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
 
   TweetModel.findOneAndDelete({ _id: req.body.id }).then((user) =>
     res.json(user)
