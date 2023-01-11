@@ -19,7 +19,7 @@ const startServer = () => {
       .then((res) => console.log("connected"))
       .catch((err) => console.log("err"));
     app.listen(PORT, () => {
-        console.log('working');
+        console.log('it is working');
     });
   } catch (e) {
     console.log("error");

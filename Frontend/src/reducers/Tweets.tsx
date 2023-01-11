@@ -8,6 +8,7 @@ type UsersTweet = {
 
 type TweetType = {
   id: string;
+  userId: string
   user: UsersTweet;
   text: string;
   time: string;
@@ -18,7 +19,6 @@ type User = {
   email: string;
   firstname: string;
   secondname: string;
-  _v: number;
   confirmed_hash: string;
 };
 

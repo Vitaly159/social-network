@@ -118,10 +118,10 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
       name: "Уведомления",
       img: <NotificationsNoneIcon className={isActiveIconStyle("Уведомления")} />,
     },
-    {
-      name: "Сообщения",
-      img: <MailOutlineIcon className={isActiveIconStyle("Сообщения")} />,
-    },
+    // {
+    //   name: "Сообщения",
+    //   img: <MailOutlineIcon className={isActiveIconStyle("Сообщения")} />,
+    // },
     {
       name: "Закладки",
       img: <BookmarkBorderIcon className={isActiveIconStyle("Закладки")} />,
@@ -134,10 +134,10 @@ export const ButtonsIcons: React.FC = (): React.ReactElement => {
       name: "Профиль",
       img: <PersonOutlineIcon className={isActiveIconStyle("Профиль")} />,
     },
-    {
-      name: "Еще",
-      img: <MoreHorizIcon className={isActiveIconStyle("Еще")} />,
-    },
+    // {
+    //   name: "Еще",
+    //   img: <MoreHorizIcon className={isActiveIconStyle("Еще")} />,
+    // },
   ];
 
   return (

@@ -1,7 +1,5 @@
 import React, { useState, useRef } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import axios from "axios";
-import uuid from "react-uuid";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -198,7 +196,7 @@ export const AddTweet = ({
     if (inputRef.current.value.trim().length > 0) {
       if (user[0]) {
         const newTweet = {
-          // id: uuid(),
+          userId: user[0]._id,
           user: {
             firstname: user[0].firstname,
             secondname: user[0].secondname,

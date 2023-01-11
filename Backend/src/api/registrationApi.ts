@@ -56,12 +56,3 @@ export const postReg = (req: express.Request, res: express.Response) => {
 //     });
 //   });
 // });
-
-// get запрос example------------------------------------
-// app.get('/api/test', async (req,res)=> {
-//   // const q = test.find().then((res)=>{return res}).then((res)=>{console.log(res);
-//   // });
-//   res.send({
-//     q: await test.find().then((res)=>{return res})
-//   })
-// })

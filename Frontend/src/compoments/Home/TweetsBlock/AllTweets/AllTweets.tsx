@@ -75,6 +75,7 @@ type UsersTweet = {
 
 type TweetType = {
   id: string;
+  userId: string
   user: UsersTweet;
   text: string;
   time: string;
@@ -99,7 +100,6 @@ export const AllTweets = ({
 
   const deleteTweet = (e, id): void => {
     e.stopPropagation();
-    console.log(id);
 
     fetch(`/api/delete-tweet/${id}`, {
       method: "delete",

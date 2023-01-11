@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Box } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 //store
-import { useAppDispatch } from "../../../hooks/hooks";
+import { useAppDispatch,useAppSelector } from "../../../hooks/hooks";
 import { getTweets } from "../../../reducers/Tweets";
 
 import axios from "axios";
@@ -36,6 +36,7 @@ type UsersTweet = {
 
 type TweetType = {
   id: string;
+  userId: string
   user: UsersTweet;
   text: string;
   time: string
@@ -44,18 +45,19 @@ type TweetType = {
 export const TweetsBlock: React.FC = (): React.ReactElement => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-
+  const user = useAppSelector((state) => state.tweets.user);
   const [loadingTweetsError, setLoadingTweetsError] = useState<boolean>(false);
   const [isLoadingTweets, setIsLoadingTweets] = useState<boolean>(true);
 
   const [showChosenTweet, setShowChosenTweet] = useState<
     (TweetType | undefined)[]
   >([]);
+console.log(user);
 
   useEffect(() => {
     const postReq = async () => {
       await axios
-        .get("api/tweets")
+        .get(`api/tweets/search?keyword=${user[0]._id}`)
         .then((res) => {      
           dispatch(getTweets(res.data.results));
           setLoadingTweetsError(false);

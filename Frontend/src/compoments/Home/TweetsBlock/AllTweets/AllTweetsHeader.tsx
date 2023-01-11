@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
-import uuid from "react-uuid";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
@@ -131,9 +129,6 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     // };
     // fetchGetTweets();
   }, [dispatch]);
-
-  console.log(user);
-  
   
   const [textBar, setTextBar] = useState<number>(280);
 
@@ -149,7 +144,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     if (user[0]) {
       if (textInput.trim().length > 0) {
         const newTweet = {
-          // id: uuid(),
+          userId: user[0]._id,
           user: {
             firstname: user[0].firstname,
             secondname: user[0].secondname,

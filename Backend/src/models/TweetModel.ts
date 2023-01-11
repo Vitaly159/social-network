@@ -10,25 +10,25 @@ type UserType = {
 };
 
 type TweetModelType = {
+  userId: string;
   user: UserType;
   text: string;
   time: string;
 };
 
-//type TweetModelAndDocumentType = TweetModelType & Document;
+type TweetModelAndDocumentType = TweetModelType & Document;
 
-const TweetScheme = new Schema({
-  text: {
-    //required: true,
+const TweetScheme = new Schema(
+  {
+    userId: {},
+    text: {},
+    user: {},
+    time: {},
   },
-  user: {
-    //required: true,
-    // ref: "User",
-    // type: object,
-  },
-  time: {
-    //required: true
-  },
-});
+  { versionKey: false }
+);
 
-export const TweetModel = model("Tweet", TweetScheme);
+export const TweetModel = model<TweetModelAndDocumentType>(
+  "Tweet",
+  TweetScheme
+);
