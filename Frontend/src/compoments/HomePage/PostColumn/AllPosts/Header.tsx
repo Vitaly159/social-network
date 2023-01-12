@@ -1,9 +1,6 @@
-import React, { useState, useRef } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import React, { useState, useRef, useEffect } from "react";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import GifIcon from "@material-ui/icons/Gif";
@@ -11,63 +8,15 @@ import EqualizerIcon from "@material-ui/icons/Equalizer";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-import { Dispatch, SetStateAction } from "react";
-import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { onAddTweet, setShowError } from "../../../reducers/Tweets";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
+import { getUser, onAddTweet, setShowError } from "../../../../reducers/Tweets";
 
 const useStyles = makeStyles({
-  wrapper: {
-    "& .MuiDialog-paperWidthSm": {
-      width: 500,
-      borderRadius: "10px",
-      padding: "0 0 15px",
-    },
-    "& .MuiSvgIcon-root": {
-      color: "#1e90ff",
-      fontSize: 20,
-      "&:hover": {
-        color: "blue",
-        cursor: "pointer",
-      },
-    },
-    "& .MuiDialogTitle-root": {
-      padding: "13px 24px 10px 0",
-    },
-  },
-  dialogHeader: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
-    padding: "0 20px",
-  },
-  dialogHeaderText: {
-    fontWeight: 700,
-    marginLeft: 25,
-    position: "relative",
-  },
-  dialogTitle: {
-    borderBottom: "1px rgb(220,220,220) solid",
-  },
-  input: {
-    margin: "10px 20px 0",
-    "& .MuiInputLabel-filled": {
-      transform: "translate(5px, 5px) scale(0.7)",
-    },
-    "& .MuiFilledInput-root": {
-      backgroundColor: "rgb(245,245,245)",
-    },
-  },
-  buttonDialog: {
-    backgroundColor: "DeepSkyBlue",
-    borderRadius: "200px",
-    color: "white",
-    textTransform: "none",
-    fontSize: 14,
-    margin: "20px 20px 10px",
-    "&:hover": {
-      backgroundColor: "rgba(0, 191, 255, 0.54)",
-    },
+  header: {
+    padding: "13px 10px",
+    fontWeight: 600,
+    border: "1px rgb(230, 230, 230) solid",
   },
   createTwiteBlock: {
     borderBottom: "1px rgb(230, 230, 230) solid",
@@ -79,7 +28,6 @@ const useStyles = makeStyles({
   form: {
     width: "100%",
     position: "relative",
-
     marginLeft: 10,
   },
   application: {
@@ -88,7 +36,7 @@ const useStyles = makeStyles({
     padding: "10px 20px",
     borderBottom: "1px rgb(230, 230, 230) solid",
   },
-  buttonTwite: {
+  buttonTweet: {
     width: "100px",
     backgroundColor: "DeepSkyBlue",
     borderRadius: "200px",
@@ -99,6 +47,10 @@ const useStyles = makeStyles({
     "&:hover": {
       backgroundColor: "rgba(0, 191, 255, 0.54)",
     },
+    "&:disabled": {
+      backgroundColor: "rgb(220,220,220)",
+      color: "rgb(140,140,140)",
+    },
   },
   space: {
     backgroundColor: "rgb(235,235,235)",
@@ -108,6 +60,19 @@ const useStyles = makeStyles({
     display: "inline-block",
     width: 100,
     textAlign: "center",
+  },
+  errorBlock: {
+    padding: "5px 15px 15px",
+  },
+  error: {
+    backgroundColor: "rgba(255,0,0,0.1)",
+    display: "flex",
+    padding: "10px",
+  },
+  iconWarning: {
+    color: "red",
+    fontSize: 16,
+    marginRight: 5,
   },
 });
 
@@ -128,19 +93,15 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-interface Props {
-  openAddTweet: boolean;
-  setOpenAddTweet: Dispatch<SetStateAction<boolean>>;
-}
-
-export const AddTweet = ({
-  openAddTweet,
-  setOpenAddTweet,
-}: Props): React.ReactElement => {
+export const Header: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-  const user = useAppSelector((state) => state.tweets.user);
-
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.tweets.user);
+  const showError = useAppSelector((state) => state.tweets.showError);
+  const [isAddingTweet, setIsAddingTweet] = useState(false);
+
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  let textInput = inputRef.current ? inputRef.current.value : "";
 
   const date = new Date();
 
@@ -153,21 +114,39 @@ export const AddTweet = ({
   };
 
   const tweetTime = date.toLocaleString("ru", options);
-
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-
   const [textBar, setTextBar] = useState<number>(280);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = (e.target as HTMLInputElement).value;
     if (value.length < 281) {
-      inputRef.current.value = value;
       setTextBar(280 - value.length);
+      textInput = value;
     }
   };
 
-  const handleClose = (): void => {
-    setOpenAddTweet(false);
+  const clickAddTweet = () => {
+    if (user[0]) {
+      if (textInput.trim().length > 0) {
+        const newTweet = {
+          userId: user[0]._id,
+          user: {
+            firstname: user[0].firstname,
+            secondname: user[0].secondname,
+            //avatar: user[0].user.avatar,
+          },
+          text: textInput,
+          time: tweetTime,
+        };
+
+        postReq(newTweet);
+        setIsAddingTweet(true);
+      }
+    } else {
+      dispatch(setShowError(true));
+      setTimeout(() => {
+        dispatch(setShowError(false));
+      }, 8000);
+    }
   };
 
   function postReq(value: any) {
@@ -178,10 +157,12 @@ export const AddTweet = ({
     })
       .then((res) => {
         dispatch(onAddTweet(value));
-        dispatch(setShowError(false));
-        // inputRef.current.value = "";
+        setIsAddingTweet(false);
+        inputRef.current.value = "";
+        setTextBar(280);
       })
       .catch((err) => {
+        setIsAddingTweet(false);
         dispatch(setShowError(true));
         setTimeout(() => {
           dispatch(setShowError(false));
@@ -189,65 +170,25 @@ export const AddTweet = ({
       });
   }
 
-  const clickAddTweet = () => {
-    const login = localStorage.getItem('twHash')
-    console.log(login);
-    
-    if (inputRef.current.value.trim().length > 0) {
-      if (user[0]) {
-        const newTweet = {
-          userId: user[0]._id,
-          user: {
-            firstname: user[0].firstname,
-            secondname: user[0].secondname,
-            //avatar: user[0].avatar,
-          },
-          text: inputRef.current.value,
-          time: tweetTime,
-        };
-
-        handleClose();
-        postReq(newTweet);
-      } else {
-        handleClose();
-        dispatch(setShowError(true));
-        setTimeout(() => {
-          dispatch(setShowError(false));
-        }, 8000);
-      }
-    }
-  };
-
   return (
-    <Dialog
-      open={openAddTweet}
-      onClose={handleClose}
-      className={classes.wrapper}
-    >
-      <DialogTitle className={classes.dialogTitle}>
-        <Box className={classes.dialogHeader}>
-          <CloseIcon onClick={handleClose} />
-          <Typography
-            variant="body1"
-            className={classes.dialogHeaderText}
-          ></Typography>
-        </Box>
-      </DialogTitle>
-
+    <Box>
+      <Box>
+        <Typography className={classes.header}>Главная</Typography>
+      </Box>
       <Box className={classes.createTwiteBlock}>
         <Box className={classes.writingField}>
           <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="me" src={""} />
+            <Avatar alt="Remy Sharp" src={""} />
           </Box>
           <Box className={classes.form}>
             <CssTextField
               inputRef={inputRef}
-              value={inputRef.current ? inputRef.current.value : ""}
-              placeholder="Что происходит?"
+              placeholder={"Что происходит?"}
               label={null}
               multiline
               style={{ width: "90%" }}
               onChange={handleText}
+              value={textInput ? textInput : ""}
               inputProps={{ maxLength: 280 }}
             />
           </Box>
@@ -262,7 +203,7 @@ export const AddTweet = ({
           <EventIcon />
         </Box>
         <Box>
-          {inputRef.current && inputRef.current.value.length !== 0 && (
+          {textInput.length > 0 && (
             <Box className={classes.progressBar}>
               <span>{textBar}</span>
               <CircularProgress
@@ -277,16 +218,34 @@ export const AddTweet = ({
                 style={{ color: "blue", position: "absolute" }}
                 size={20}
                 thickness={4}
-                value={(100 / 280) * inputRef.current.value.length}
+                value={(100 / 280) * textInput.length}
               />
             </Box>
           )}
 
-          <Button className={classes.buttonTwite} onClick={clickAddTweet}>
-            Твитнуть
+          <Button
+            className={classes.buttonTweet}
+            onClick={clickAddTweet}
+            disabled={textInput.trim().length === 0 ? true : false}
+          >
+            {isAddingTweet ? (
+              <CircularProgress style={{ color: "white" }} size={20} />
+            ) : (
+              "Твитнуть"
+            )}
           </Button>
         </Box>
       </Box>
-    </Dialog>
+      {showError && (
+        <Box className={classes.errorBlock}>
+          <Box className={classes.error}>
+            <ErrorOutlineIcon className={classes.iconWarning} />
+            <span>Ошибка при добавлении твита</span>
+          </Box>
+        </Box>
+      )}
+
+      <Box className={classes.space} />
+    </Box>
   );
 };

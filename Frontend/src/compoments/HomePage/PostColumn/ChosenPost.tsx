@@ -86,7 +86,7 @@ interface Props {
   setShowChosenTweet: Dispatch<SetStateAction<(TweetType | undefined)[]>>;
 }
 
-export const ChosenTweet = ({
+export const ChosenPost = ({
   showChosenTweet,
   setShowChosenTweet,
 }: Props): React.ReactElement => {

@@ -5,12 +5,11 @@ import { Box, List, IconButton, Typography, Button } from "@material-ui/core";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ListAltIcon from "@material-ui/icons/ListAlt";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-import { AddTweet } from "./AddTweet";
+import { ButtonAddTweet } from "./ButtonAddTweet";
 
 const useStyles = makeStyles({
   iconsWrapper: {
@@ -164,7 +163,7 @@ export const Sidebar: React.FC = (): React.ReactElement => {
         <Button className={classes.buttonTwite} onClick={clickOpenAddTweet}>Твитнуть</Button>
       </Box>
 
-      <AddTweet openAddTweet={openAddTweet} setOpenAddTweet={setOpenAddTweet} />
+      <ButtonAddTweet openAddTweet={openAddTweet} setOpenAddTweet={setOpenAddTweet} />
     </Box>
   );
 };

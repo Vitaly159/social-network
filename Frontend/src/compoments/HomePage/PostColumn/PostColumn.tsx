@@ -9,8 +9,8 @@ import { getTweets } from "../../../reducers/Tweets";
 
 import axios from "axios"; 
 //компоненты
-import { AllTweets } from "./AllTweets/AllTweets";
-import { ChosenTweet } from "./ChosenTweet";
+import { AllPosts } from "./AllPosts/AllPosts";
+import { ChosenPost } from "./ChosenPost";
 
 const useStyles = makeStyles({
   errorBlock: {
@@ -42,7 +42,7 @@ type TweetType = {
   time: string
 };
 
-export const TweetsBlock: React.FC = (): React.ReactElement => {
+export const PostColumn: React.FC = (): React.ReactElement => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.tweets.user);
@@ -52,7 +52,6 @@ export const TweetsBlock: React.FC = (): React.ReactElement => {
   const [showChosenTweet, setShowChosenTweet] = useState<
     (TweetType | undefined)[]
   >([]);
-console.log(user);
 
   useEffect(() => {
     const postReq = async () => {
@@ -74,12 +73,12 @@ console.log(user);
   return (
     <Paper>
       {showChosenTweet[0] ? (
-        <ChosenTweet
+        <ChosenPost
           showChosenTweet={showChosenTweet}
           setShowChosenTweet={setShowChosenTweet}
         />
       ) : (
-        <AllTweets
+        <AllPosts
           setShowChosenTweet={setShowChosenTweet}
           isLoadingTweets={isLoadingTweets}
         />

@@ -3,9 +3,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
 //компоненты
-import { Sidebar } from "../compoments/Home/IconsButtons/IconsButtons";
+import { Sidebar } from "../compoments/Home/Sidebar/Sidebar";
 import { Recommendations } from "../compoments/Home/Recommendations";
-import { TweetsBlock } from "../compoments/Home/TweetsBlock/TweetsBlock";
+import { PostColumn } from "../compoments/Home/PostColumn/PostColumn";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -26,7 +26,7 @@ export const HomePage: React.FC = (): React.ReactElement => {
           <Sidebar />
         </Grid>
         <Grid item xs={6}>
-          <TweetsBlock />
+          <PostColumn />
         </Grid>
         <Grid item xs={3}>
           <Recommendations />

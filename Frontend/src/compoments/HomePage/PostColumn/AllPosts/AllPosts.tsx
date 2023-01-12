@@ -11,7 +11,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Dispatch, SetStateAction } from "react";
 
-import { AllTweetsHeader } from "./AllTweetsHeader";
+import { Header } from "./Header";
 
 const useStyles = makeStyles({
   post: {
@@ -86,7 +86,7 @@ interface Props {
   isLoadingTweets: boolean;
 }
 
-export const AllTweets = ({
+export const AllPosts = ({
   setShowChosenTweet,
   isLoadingTweets,
 }: Props): React.ReactElement => {
@@ -112,7 +112,7 @@ export const AllTweets = ({
 
   return (
     <Paper>
-      <AllTweetsHeader />
+      <Header />
 
       {isLoadingTweets && (
         <Box className={classes.progressBar}>
