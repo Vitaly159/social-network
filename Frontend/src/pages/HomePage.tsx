@@ -3,9 +3,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
 //компоненты
-import { Sidebar } from "../compoments/Home/Sidebar/Sidebar";
-import { Recommendations } from "../compoments/Home/Recommendations";
-import { PostColumn } from "../compoments/Home/PostColumn/PostColumn";
+import { Sidebar } from "../compoments/HomePage/Sidebar/Sidebar";
+import { Recommendations } from "../compoments/HomePage/Recommendations";
+import { PostColumn } from "../compoments/HomePage/PostColumn/PostColumn";
 
 const useStyles = makeStyles({
   wrapper: {
