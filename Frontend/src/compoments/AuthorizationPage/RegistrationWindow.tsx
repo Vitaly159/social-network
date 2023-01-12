@@ -77,7 +77,7 @@ interface Props {
   checkAuth: () => void;
 }
 
-export const DialogSignUp = ({
+export const RegistrationWindow = ({
   openSignUp,
   setOpenSignUp,
   checkAuth,

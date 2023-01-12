@@ -3,9 +3,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Container } from "@material-ui/core";
 //компоненты
-import { ButtonsIcons } from "./IconsButtons/IconsButtons";
-import { Recommendations } from "./Recommendations";
-import { TweetsBlock } from "./TweetsBlock/TweetsBlock";
+import { Sidebar } from "../compoments/Home/IconsButtons/IconsButtons";
+import { Recommendations } from "../compoments/Home/Recommendations";
+import { TweetsBlock } from "../compoments/Home/TweetsBlock/TweetsBlock";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -16,14 +16,14 @@ const useStyles = makeStyles({
   },
 });
 
-export const Home: React.FC = (): React.ReactElement => {
+export const HomePage: React.FC = (): React.ReactElement => {
   const classes = useStyles();
 
   return (
     <Container className={classes.wrapper} maxWidth="md">
       <Grid container spacing={3}>
         <Grid item xs={3} className={classes.iconButtons}>
-          <ButtonsIcons />
+          <Sidebar />
         </Grid>
         <Grid item xs={6}>
           <TweetsBlock />

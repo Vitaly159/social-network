@@ -30,10 +30,6 @@ export const getTweets = async (
   });
 };
 
-// TweetModel.findOneAndDelete({ _id: req.body.id }).then((user) =>
-// res.json(user)
-// );
-
 // УДАЛЕНИЕ ТВИТТА
 export const apiDeleteTweet = "/api/delete-tweet/:text";
 

@@ -7,7 +7,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useAppDispatch,useAppSelector } from "../../../hooks/hooks";
 import { getTweets } from "../../../reducers/Tweets";
 
-import axios from "axios";
+import axios from "axios"; 
 //компоненты
 import { AllTweets } from "./AllTweets/AllTweets";
 import { ChosenTweet } from "./ChosenTweet";

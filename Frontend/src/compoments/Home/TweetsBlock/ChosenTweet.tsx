@@ -74,8 +74,8 @@ type UsersTweet = {
 };
 
 type TweetType = {
-  id: string;
   userId: string
+  id: string;
   user: UsersTweet;
   text: string;
   time: string

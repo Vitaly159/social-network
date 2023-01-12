@@ -106,12 +106,12 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
   const date = new Date();
 
   const options: Intl.DateTimeFormatOptions = {
-    hour: 'numeric',
-    minute: 'numeric',
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-  }
+    hour: "numeric",
+    minute: "numeric",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  };
 
   const tweetTime = date.toLocaleString("ru", options);
 
@@ -129,7 +129,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
     // };
     // fetchGetTweets();
   }, [dispatch]);
-  
+
   const [textBar, setTextBar] = useState<number>(280);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -151,7 +151,7 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
             //avatar: user[0].user.avatar,
           },
           text: textInput,
-          time: tweetTime
+          time: tweetTime,
         };
 
         postReq(newTweet);
@@ -169,9 +169,9 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
 
   function postReq(value: any) {
     console.log(value);
-    
+
     fetch("/api/create-tweet", {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(value),
       headers: { "Content-Type": "application/json" },
     })
@@ -213,8 +213,6 @@ export const AllTweetsHeader: React.FC = (): React.ReactElement => {
             />
           </Box>
         </Box>
-
-        <Box>Отвечать могут все пользователи</Box>
       </Box>
       <Box className={classes.application}>
         <Box>

@@ -8,8 +8,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import PeopleIcon from "@material-ui/icons/People";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 //компоненты
-import { DialogSignIn } from "./DialogSignIn"; //окно входа
-import { DialogSignUp } from "./DialogSignUp"; //окно регистрации
+import { DialogSignIn } from "../compoments/AuthorizationPage/DialogSignIn"; //окно входа
+import { RegistrationWindow } from "../compoments/AuthorizationPage/RegistrationWindow"; //окно регистрации
 
 const useStyles = makeStyles({
   wrapper: {
@@ -91,7 +91,7 @@ type Props = {
   checkAuth: () => void;
 };
 
-export const SignIn: React.FC<Props> = ({ checkAuth }): React.ReactElement => {
+export const AuthorizationPage: React.FC<Props> = ({ checkAuth }): React.ReactElement => {
   const classes = useStyles();
 
   const [openSignIn, setOpenSignIn] = useState<boolean>(false); //окно входа
@@ -151,7 +151,7 @@ export const SignIn: React.FC<Props> = ({ checkAuth }): React.ReactElement => {
       </Box>
 
       <DialogSignIn openSignIn={openSignIn} setOpenSignIn={setOpenSignIn} />
-      <DialogSignUp
+      <RegistrationWindow
         openSignUp={openSignUp}
         setOpenSignUp={setOpenSignUp}
         checkAuth={checkAuth}
