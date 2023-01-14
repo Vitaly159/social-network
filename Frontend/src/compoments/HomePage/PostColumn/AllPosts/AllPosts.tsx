@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 //material ui
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Paper, Box, Avatar, Typography } from "@material-ui/core";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ReplyIcon from "@material-ui/icons/Reply";
 import CircularProgress from "@material-ui/core/CircularProgress";
+//more icon
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 //store
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Dispatch, SetStateAction } from "react";
@@ -65,6 +69,14 @@ const useStyles = makeStyles({
     opacity: 0.5,
     padding: "10px 5px",
   },
+  menu: {
+    "& .MuiListItem-button": {
+      backgroundColor: "white",
+      "&:hover": {
+        backgroundColor: "rgb(240,240,240)",
+      },
+    },
+  },
 });
 
 type UsersTweet = {
@@ -75,7 +87,7 @@ type UsersTweet = {
 
 type TweetType = {
   id: string;
-  userId: string
+  userId: string;
   user: UsersTweet;
   text: string;
   time: string;
@@ -84,35 +96,53 @@ type TweetType = {
 interface Props {
   setShowChosenTweet: Dispatch<SetStateAction<(TweetType | undefined)[]>>;
   isLoadingTweets: boolean;
+  postReq: () => Promise<void>;
 }
 
 export const AllPosts = ({
   setShowChosenTweet,
   isLoadingTweets,
+  postReq,
 }: Props): React.ReactElement => {
   const classes = useStyles();
   const tweets = useAppSelector((state) => state.tweets.tweets);
+  const [postsId, setPostsId] = useState<string[]>([""]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>, id: string[]) => {
+    event.stopPropagation();
+    setPostsId(id);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
 
   const clickOnTweet = (value: any): void => {
     const tweet = [tweets.find((tweet) => tweet["_id"] === value)];
     setShowChosenTweet(tweet);
   };
 
-  const deleteTweet = (e, id): void => {
+  const deleteTweet = (e: React.MouseEvent<HTMLElement>): void => {
     e.stopPropagation();
 
-    fetch(`/api/delete-tweet/${id}`, {
+    fetch(`/api/delete-tweet/${postsId}`, {
       method: "delete",
-      body: JSON.stringify({ id: id }),
+      body: JSON.stringify({ id: postsId }),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
-      .then((res) => res);
+      .then((res) => {
+        handleClose(e);
+        postReq();
+      });
   };
 
   return (
     <Paper>
-      <Header />
+      <Header getPosts={postReq} />
 
       {isLoadingTweets && (
         <Box className={classes.progressBar}>
@@ -147,13 +177,8 @@ export const AllPosts = ({
                         @userName
                       </Typography>
                     </Box>
-                    <Box
-                      style={{ zIndex: 100 }}
-                      onClick={(e) => {
-                        deleteTweet(e, tweet["_id"]);
-                      }}
-                    >
-                      X
+                    <Box onClick={(e) => handleClick(e, tweet["_id"])}>
+                      <MoreHorizIcon />
                     </Box>
                   </Box>
                   <Box className={classes.postsText}>{tweet.text}</Box>
@@ -179,6 +204,17 @@ export const AllPosts = ({
                   </Box>
                 </Box>
               </Box>
+
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                className={classes.menu}
+              >
+                <MenuItem onClick={handleClose} style={{marginBottom: 20}}>Закладки</MenuItem>
+                <MenuItem onClick={deleteTweet}>Удалить</MenuItem>
+              </Menu>
             </Box>
           ))}
     </Paper>

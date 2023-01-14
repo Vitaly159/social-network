@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  withStyles,
+  createStyles,
+  Theme,
+} from "@material-ui/core/styles";
 import { Box, Typography, Avatar, TextField, Button } from "@material-ui/core";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import GifIcon from "@material-ui/icons/Gif";
@@ -10,72 +15,112 @@ import EventIcon from "@material-ui/icons/Event";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
-import { getUser, onAddTweet, setShowError } from "../../../../reducers/Tweets";
+import { setShowError } from "../../../../reducers/Tweets";
 
-const useStyles = makeStyles({
-  header: {
-    padding: "13px 10px",
-    fontWeight: 600,
-    border: "1px rgb(230, 230, 230) solid",
-  },
-  createTwiteBlock: {
-    borderBottom: "1px rgb(230, 230, 230) solid",
-    padding: "10px 0",
-  },
-  writingField: {
-    display: "flex",
-  },
-  form: {
-    width: "100%",
-    position: "relative",
-    marginLeft: 10,
-  },
-  application: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 20px",
-    borderBottom: "1px rgb(230, 230, 230) solid",
-  },
-  buttonTweet: {
-    width: "100px",
-    backgroundColor: "DeepSkyBlue",
-    borderRadius: "200px",
-    color: "white",
-    textTransform: "none",
-    fontSize: 14,
-    fontWeight: 600,
-    "&:hover": {
-      backgroundColor: "rgba(0, 191, 255, 0.54)",
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    header: {
+      padding: "13px 10px",
+      fontWeight: 600,
+      border: "1px rgb(230, 230, 230) solid",
     },
-    "&:disabled": {
-      backgroundColor: "rgb(220,220,220)",
-      color: "rgb(140,140,140)",
+    createTwiteBlock: {
+      borderBottom: "1px rgb(230, 230, 230) solid",
     },
-  },
-  space: {
-    backgroundColor: "rgb(235,235,235)",
-    height: 10,
-  },
-  progressBar: {
-    display: "inline-block",
-    width: 100,
-    textAlign: "center",
-  },
-  errorBlock: {
-    padding: "5px 15px 15px",
-  },
-  error: {
-    backgroundColor: "rgba(255,0,0,0.1)",
-    display: "flex",
-    padding: "10px",
-  },
-  iconWarning: {
-    color: "red",
-    fontSize: 16,
-    marginRight: 5,
-  },
-});
-
+    writingField: {
+      display: "flex",
+    },
+    form: {
+      width: "100%",
+      position: "relative",
+      marginLeft: 10,
+    },
+    application: {
+      display: "flex",
+      justifyContent: "space-between",
+      padding: "10px 20px",
+      borderBottom: "1px rgb(230, 230, 230) solid",
+    },
+    buttonTweet: {
+      width: "100px",
+      backgroundColor: "DeepSkyBlue",
+      borderRadius: "200px",
+      color: "white",
+      textTransform: "none",
+      fontSize: 14,
+      fontWeight: 600,
+      "&:hover": {
+        backgroundColor: "rgba(0, 191, 255, 0.54)",
+      },
+      "&:disabled": {
+        backgroundColor: "rgb(220,220,220)",
+        color: "rgb(140,140,140)",
+      },
+    },
+    space: {
+      backgroundColor: "rgb(235,235,235)",
+      height: 10,
+    },
+    progressBar: {
+      display: "inline-block",
+      width: 100,
+      textAlign: "center",
+    },
+    errorBlock: {
+      padding: "5px 15px 15px",
+    },
+    error: {
+      backgroundColor: "rgba(255,0,0,0.1)",
+      display: "flex",
+      padding: "10px",
+    },
+    iconWarning: {
+      color: "red",
+      fontSize: 16,
+      marginRight: 5,
+    },
+    userInfo: {
+      borderBottom: "1px rgb(230, 230, 230) solid",
+      display: "flex",
+      padding: "10px 0 10px 10px",
+      height: "128px",
+    },
+    large: {
+      width: theme.spacing(16),
+      height: theme.spacing(16),
+    },
+    commonInfo: {
+      marginLeft: 10,
+    },
+    postsAndFollowersInfo: {
+      boxSizing: "border-box",
+      marginTop: 10,
+      display: "flex",
+    },
+    name: {
+      boxSizing: "border-box",
+    },
+    postsNumber: {
+      padding: "5px 15px",
+      border: "1px rgb(200,200,200) solid",
+    },
+    followersAndFollowing: {
+      border: "1px rgb(200,200,200) solid",
+      borderLeft: "none",
+      padding: "5px 15px",
+    },
+    number: {
+      fontWeight: 600,
+      padding: 0,
+      margin: 0,
+    },
+    text: {
+      padding: 0,
+      margin: 0,
+      opacity: 0.7,
+    },
+  })
+);
 const CssTextField = withStyles({
   root: {
     "& .MuiInputBase-input": {
@@ -93,10 +138,15 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-export const Header: React.FC = (): React.ReactElement => {
+interface Props {
+  getPosts: () => Promise<void>
+}
+
+export const Header = ({getPosts}: Props): React.ReactElement => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.tweets.user);
+  const tweets = useAppSelector((state) => state.tweets.tweets);
   const showError = useAppSelector((state) => state.tweets.showError);
   const [isAddingTweet, setIsAddingTweet] = useState(false);
 
@@ -138,7 +188,7 @@ export const Header: React.FC = (): React.ReactElement => {
           time: tweetTime,
         };
 
-        postReq(newTweet);
+        postReqCreatePost(newTweet);
         setIsAddingTweet(true);
       }
     } else {
@@ -149,17 +199,17 @@ export const Header: React.FC = (): React.ReactElement => {
     }
   };
 
-  function postReq(value: any) {
+  function postReqCreatePost(value: any) {
     fetch("/api/create-tweet", {
       method: "POST",
       body: JSON.stringify(value),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        dispatch(onAddTweet(value));
         setIsAddingTweet(false);
         inputRef.current.value = "";
         setTextBar(280);
+        getPosts()
       })
       .catch((err) => {
         setIsAddingTweet(false);
@@ -176,10 +226,32 @@ export const Header: React.FC = (): React.ReactElement => {
         <Typography className={classes.header}>Главная</Typography>
       </Box>
       <Box className={classes.createTwiteBlock}>
-        <Box className={classes.writingField}>
-          <Box style={{ paddingLeft: 20 }}>
-            <Avatar alt="Remy Sharp" src={""} />
+        <Box className={classes.userInfo}>
+          <Box>
+            <Avatar alt="Remy Sharp" src={""} className={classes.large} />
           </Box>
+          <Box className={classes.commonInfo}>
+            <Box className={classes.name}>
+              <Typography variant="h6">{user[0].firstname}</Typography>
+              <Typography variant="h6">{user[0].secondname}</Typography>
+            </Box>
+            <Box className={classes.postsAndFollowersInfo}>
+              <Box className={classes.postsNumber}>
+                <p className={classes.number}>{tweets.length}</p>
+                <p className={classes.text}>Посты</p>
+              </Box>
+              <Box className={classes.followersAndFollowing}>
+                <p className={classes.number}>363</p>
+                <p className={classes.text}>Подписчики</p>
+              </Box>
+              <Box className={classes.followersAndFollowing}>
+                <p className={classes.number}>363</p>
+                <p className={classes.text}>Читаемые</p>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        <Box className={classes.writingField}>
           <Box className={classes.form}>
             <CssTextField
               inputRef={inputRef}
@@ -222,7 +294,6 @@ export const Header: React.FC = (): React.ReactElement => {
               />
             </Box>
           )}
-
           <Button
             className={classes.buttonTweet}
             onClick={clickAddTweet}

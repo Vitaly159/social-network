@@ -10,6 +10,7 @@ import { PostColumn } from "../compoments/HomePage/PostColumn/PostColumn";
 const useStyles = makeStyles({
   wrapper: {
     padding: "0",
+    marginTop: 10
   },
   iconButtons: {
     display: "block",

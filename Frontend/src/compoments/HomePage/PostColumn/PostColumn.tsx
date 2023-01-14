@@ -4,10 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Box } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 //store
-import { useAppDispatch,useAppSelector } from "../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { getTweets } from "../../../reducers/Tweets";
 
-import axios from "axios"; 
+import axios from "axios";
 //компоненты
 import { AllPosts } from "./AllPosts/AllPosts";
 import { ChosenPost } from "./ChosenPost";
@@ -36,10 +36,10 @@ type UsersTweet = {
 
 type TweetType = {
   id: string;
-  userId: string
+  userId: string;
   user: UsersTweet;
   text: string;
-  time: string
+  time: string;
 };
 
 export const PostColumn: React.FC = (): React.ReactElement => {
@@ -53,20 +53,21 @@ export const PostColumn: React.FC = (): React.ReactElement => {
     (TweetType | undefined)[]
   >([]);
 
+  const postReq = async () => {
+    await axios
+      .get(`api/tweets/search?keyword=${user[0]._id}`)
+      .then((res) => {
+        dispatch(getTweets(res.data.results));
+        setLoadingTweetsError(false);
+        setIsLoadingTweets(false);
+      })
+      .catch((error) => {
+        setLoadingTweetsError(true);
+        setIsLoadingTweets(false);
+      });
+  };
+
   useEffect(() => {
-    const postReq = async () => {
-      await axios
-        .get(`api/tweets/search?keyword=${user[0]._id}`)
-        .then((res) => {      
-          dispatch(getTweets(res.data.results));
-          setLoadingTweetsError(false);
-          setIsLoadingTweets(false);
-        })
-        .catch((error) => {
-          setLoadingTweetsError(true);
-          setIsLoadingTweets(false);
-        });
-    };
     postReq();
   }, [dispatch]);
 
@@ -81,6 +82,7 @@ export const PostColumn: React.FC = (): React.ReactElement => {
         <AllPosts
           setShowChosenTweet={setShowChosenTweet}
           isLoadingTweets={isLoadingTweets}
+          postReq={postReq}
         />
       )}
 

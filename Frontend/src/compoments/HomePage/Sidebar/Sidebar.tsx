@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, List, IconButton, Typography, Button } from "@material-ui/core";
-import TwitterIcon from "@material-ui/icons/Twitter";
 import SearchIcon from "@material-ui/icons/Search";
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import { ButtonAddTweet } from "./ButtonAddTweet";
 
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { setIsAuth } from "../../../reducers/Tweets";
+
 const useStyles = makeStyles({
   iconsWrapper: {
-    paddingTop: 13
+    paddingTop: 13,
   },
   logoBlock: {
     display: "flex",
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
   iconBlock: {
     display: "flex",
     top: -12,
-    position: "relative"
+    position: "relative",
   },
   twitterIcon: {
     color: "DeepSkyBlue",
@@ -36,7 +38,7 @@ const useStyles = makeStyles({
   notActiveIcon: {
     alignSelf: "center",
     fontSize: 27,
-    color: 'black'
+    color: "black",
   },
   activeIcon: {
     color: "DeepSkyBlue",
@@ -71,8 +73,8 @@ const useStyles = makeStyles({
     },
   },
   buttonBlock: {
-    textAlign: 'center'
-  }
+    textAlign: "center",
+  },
 });
 
 interface Menu {
@@ -86,8 +88,10 @@ const refreshPage = (): void => {
 
 export const Sidebar: React.FC = (): React.ReactElement => {
   const classes = useStyles();
-
+  const dispatch = useAppDispatch();
   const [openAddTweet, setOpenAddTweet] = useState<boolean>(false);
+  const isAuth = useAppSelector((state) => state.tweets.isAuth);
+  console.log(isAuth);
 
   const clickOpenAddTweet = (): void => {
     setOpenAddTweet(true);
@@ -115,7 +119,9 @@ export const Sidebar: React.FC = (): React.ReactElement => {
     },
     {
       name: "Уведомления",
-      img: <NotificationsNoneIcon className={isActiveIconStyle("Уведомления")} />,
+      img: (
+        <NotificationsNoneIcon className={isActiveIconStyle("Уведомления")} />
+      ),
     },
     {
       name: "Закладки",
@@ -131,20 +137,26 @@ export const Sidebar: React.FC = (): React.ReactElement => {
     },
   ];
 
+  // useEffect(()=> {
+  //   refreshPage()
+  // }, [isAuth])
+
   return (
     <Box>
       <List component="nav" className={classes.iconsWrapper}>
-        <Box className={classes.logoBlock}>
-          <IconButton onClick={refreshPage} className={classes.twitterIconBtn}>
-            <TwitterIcon className={classes.twitterIcon} />
-          </IconButton>
-        </Box>
-
         {icons.map((icon, index) => (
           <Box
             className={classes.iconBlock}
             key={index}
-            onClick={() => getActive(icon.name)}
+            onClick={() => (
+              getActive(icon.name),
+              icon.name == "Профиль"
+                ? (localStorage.setItem("twHash", ""),
+                  setTimeout(() => {
+                    refreshPage();
+                  }, 500))
+                : ""
+            )}
           >
             <IconButton className={classes.button}>
               {icon.img}
@@ -160,10 +172,15 @@ export const Sidebar: React.FC = (): React.ReactElement => {
         ))}
       </List>
       <Box className={classes.buttonBlock}>
-        <Button className={classes.buttonTwite} onClick={clickOpenAddTweet}>Твитнуть</Button>
+        <Button className={classes.buttonTwite} onClick={clickOpenAddTweet}>
+          Твитнуть
+        </Button>
       </Box>
 
-      <ButtonAddTweet openAddTweet={openAddTweet} setOpenAddTweet={setOpenAddTweet} />
+      <ButtonAddTweet
+        openAddTweet={openAddTweet}
+        setOpenAddTweet={setOpenAddTweet}
+      />
     </Box>
   );
 };
