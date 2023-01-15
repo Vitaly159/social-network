@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+//router
+import { Link } from "react-router-dom";
 //material ui
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, List, IconButton, Typography, Button } from "@material-ui/core";
@@ -8,10 +10,8 @@ import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import ListAltIcon from "@material-ui/icons/ListAlt";
+//компоненты
 import { ButtonAddTweet } from "./ButtonAddTweet";
-
-import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { setIsAuth } from "../../../reducers/Tweets";
 
 const useStyles = makeStyles({
   iconsWrapper: {
@@ -80,18 +80,21 @@ const useStyles = makeStyles({
 interface Menu {
   name: string;
   img: any;
+  link: string;
 }
 
 const refreshPage = (): void => {
   window.location.reload();
 };
 
-export const Sidebar: React.FC = (): React.ReactElement => {
+const setUpRouting = (pageName: any) => {
+  if (pageName === "Главная") return "/home/my-posts";
+  //pageName === "Поиск людей" && "/home/search";
+};
+
+export const Sidebar = (): React.ReactElement => {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
   const [openAddTweet, setOpenAddTweet] = useState<boolean>(false);
-  const isAuth = useAppSelector((state) => state.tweets.isAuth);
-  console.log(isAuth);
 
   const clickOpenAddTweet = (): void => {
     setOpenAddTweet(true);
@@ -112,65 +115,69 @@ export const Sidebar: React.FC = (): React.ReactElement => {
     {
       name: "Главная",
       img: <HomeOutlinedIcon className={isActiveIconStyle("Главная")} />,
+      link: "my-posts",
     },
     {
-      name: "Поиск",
+      name: "Поиск людей",
       img: <SearchIcon className={isActiveIconStyle("Поиск")} />,
+      link: "search",
     },
     {
       name: "Уведомления",
       img: (
         <NotificationsNoneIcon className={isActiveIconStyle("Уведомления")} />
       ),
+      link: "search",
     },
     {
       name: "Закладки",
       img: <BookmarkBorderIcon className={isActiveIconStyle("Закладки")} />,
+      link: "my-profile",
     },
     {
       name: "Списки",
       img: <ListAltIcon className={isActiveIconStyle("Списки")} />,
+      link: "my-profile",
     },
     {
       name: "Профиль",
       img: <PersonOutlineIcon className={isActiveIconStyle("Профиль")} />,
+      link: "my-profile",
     },
   ];
 
-  // useEffect(()=> {
-  //   refreshPage()
-  // }, [isAuth])
-
   return (
-    <Box>
-      <List component="nav" className={classes.iconsWrapper}>
-        {icons.map((icon, index) => (
-          <Box
-            className={classes.iconBlock}
-            key={index}
-            onClick={() => (
-              getActive(icon.name),
-              icon.name == "Профиль"
-                ? (localStorage.setItem("twHash", ""),
-                  setTimeout(() => {
-                    refreshPage();
-                  }, 500))
-                : ""
-            )}
-          >
-            <IconButton className={classes.button}>
-              {icon.img}
-              <Typography
-                className={`${classes.textIcon} ${isActiveIconStyle(
-                  icon.name
-                )}`}
-              >
-                {icon.name}
-              </Typography>
-            </IconButton>
-          </Box>
+    <Box style={{ minWidth: "220px" }}>
+      <List component="nav">
+        {icons?.map((icon, index) => (
+          <Link key={index} to={icon.link}>
+            <Box
+              className={classes.iconBlock}
+              onClick={() => (
+                getActive(icon.name),
+                icon.name == "Профиль"
+                  ? (localStorage.setItem("twHash", ""),
+                    setTimeout(() => {
+                      refreshPage();
+                    }, 100))
+                  : ""
+              )}
+            >
+              <IconButton className={classes.button}>
+                {icon.img}
+                <Typography
+                  className={`${classes.textIcon} ${isActiveIconStyle(
+                    icon.name
+                  )}`}
+                >
+                  {icon.name}
+                </Typography>
+              </IconButton>
+            </Box>
+          </Link>
         ))}
       </List>
+
       <Box className={classes.buttonBlock}>
         <Button className={classes.buttonTwite} onClick={clickOpenAddTweet}>
           Твитнуть

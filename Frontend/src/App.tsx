@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 //модули
 import { Routes, Route } from "react-router-dom"; //роутинг(маршрутизация)
 import { Box } from "@material-ui/core"; //стили material-ui
-//компоненты
-import { AuthorizationPage } from "./pages/AuthorizationPage"; //страница регистрации и авторизации
-import { HomePage } from "./pages/HomePage"; //домашняя страница юзера
-import { useEffect, useState } from "react";
+
 import { getUser, setIsAuth } from "./reducers/Tweets";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { useNavigate, useLocation } from "react-router-dom";
+//компоненты
+import { AuthorizationPage } from "./pages/AuthorizationPage"; //страница регистрации и авторизации
+import { HomePage } from "./pages/HomePage"; //домашняя страница юзера
+import { MyPostColumn } from "./compoments/HomePage/MyPostColumn/MyPostColumn";
+import { SearchOtherUsers } from "./compoments/HomePage/SearchOtherUsers";
+import { MyProfile } from "./compoments/HomePage/MyProfile";
 
 const routing = (path: string, isAuth: boolean | null) => {
   if (isAuth) {
@@ -63,7 +67,7 @@ function App() {
   };
 
   useEffect(() => {
-    isAuth ? navigate("/home") : navigate("/");
+    isAuth ? navigate("/home/my-posts") : navigate("/");
   }, [isAuth]);
 
   useEffect(() => {
@@ -77,7 +81,11 @@ function App() {
         <Box>
           <Routes>
             <Route path="/" element={<AuthorizationPage checkAuth={checkAuth} />} />
-            <Route path={routing("/home", isAuth)} element={<HomePage />} />
+            <Route path={routing("/home", isAuth)} element={<HomePage />}>
+              <Route path={routing("my-posts", isAuth)} element={<MyPostColumn />} />
+              <Route path={routing("search", isAuth)} element={<SearchOtherUsers />} />
+              <Route path={routing("my-profile", isAuth)} element={<MyProfile />} />
+            </Route>
           </Routes>
         </Box>
       )}

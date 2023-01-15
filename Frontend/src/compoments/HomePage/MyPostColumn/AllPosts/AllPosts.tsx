@@ -141,7 +141,7 @@ export const AllPosts = ({
   };
 
   return (
-    <Paper>
+    <Paper style={{minWidth: '468px'}}>
       <Header getPosts={postReq} />
 
       {isLoadingTweets && (

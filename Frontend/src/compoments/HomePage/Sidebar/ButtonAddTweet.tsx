@@ -190,9 +190,6 @@ export const ButtonAddTweet = ({
   }
 
   const clickAddTweet = () => {
-    const login = localStorage.getItem('twHash')
-    console.log(login);
-    
     if (inputRef.current.value.trim().length > 0) {
       if (user[0]) {
         const newTweet = {

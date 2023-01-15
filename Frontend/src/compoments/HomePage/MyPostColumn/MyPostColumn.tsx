@@ -42,7 +42,7 @@ type TweetType = {
   time: string;
 };
 
-export const PostColumn: React.FC = (): React.ReactElement => {
+export const MyPostColumn: React.FC = (): React.ReactElement => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.tweets.user);
@@ -52,11 +52,11 @@ export const PostColumn: React.FC = (): React.ReactElement => {
   const [showChosenTweet, setShowChosenTweet] = useState<
     (TweetType | undefined)[]
   >([]);
-
+  
   const postReq = async () => {
     await axios
       .get(`api/tweets/search?keyword=${user[0]._id}`)
-      .then((res) => {
+      .then((res) => {        
         dispatch(getTweets(res.data.results));
         setLoadingTweetsError(false);
         setIsLoadingTweets(false);

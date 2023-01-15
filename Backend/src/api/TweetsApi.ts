@@ -19,7 +19,7 @@ export const postAddTweet = (req: express.Request, res: express.Response) => {
 };
 
 // get запрос на полученик твиттов--------------------------------------------------------
-export const apiGetTweets = "/api/tweets/search";
+export const apiGetTweets = "/home/api/tweets/search";
 
 export const getTweets = async (
   req: express.Request,
